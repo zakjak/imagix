@@ -1,6 +1,9 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
+import '@radix-ui/themes/styles.css';
+import { UserProvider } from '@auth0/nextjs-auth0/client'
+import { Theme } from "@radix-ui/themes";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -12,10 +15,15 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
-        <Navbar />
-        {children}
-      </body>
+      <UserProvider>
+        <Theme>
+          <body className={inter.className}>
+            <Navbar />
+            {children}
+          </body>
+        </Theme>
+
+      </UserProvider>
     </html>
   );
 }
