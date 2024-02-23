@@ -1,14 +1,16 @@
+import { useState } from 'react'
 import { Route, Routes } from 'react-router-dom'
 import Home from './pages/Home'
-import Navbar from './components/Navbar'
+import NavComponent from './components/NavComponent'
 
 function App() {
+
   return (
-      <Routes>
-        <Route element={<Navbar />}>
-          <Route index path='/' element={<Home />} />
-        </Route>
-      </Routes>
+    <Routes>
+      <Route path='/' element={<NavComponent />}>
+        <Route index element={<Home />} />
+      </Route>
+    </Routes>
   )
 }
 
