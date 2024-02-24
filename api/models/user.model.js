@@ -21,7 +21,7 @@ const UserSchema = new mongoose.Schema({
     bio: {
         type: String
     },
-    location: {
+    banner:{
         type: String
     },
     followers: {

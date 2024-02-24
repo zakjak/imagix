@@ -60,9 +60,9 @@ function Navbar() {
   return (
     <nav className="h-16 w-full bg-gray-200 dark:bg-[#0B0C0E] shadow-md flex items-center">
          <div className="w-[90%] mx-auto flex justify-between items-center">
-            <div className="flex gap-4">
-                <Link to='/' className="">
-                    Ima<span className="">gix</span>
+            <div className="flex gap-4 items-center">
+                <Link to='/' className="text-xl">
+                    Ima<span className="text-2xl bg-gradient-to-r from-blue-500 to-red-300 text-transparent bg-clip-text">gix</span>
                 </Link>
                 <div className="">
                     Search
