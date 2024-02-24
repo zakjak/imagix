@@ -6,9 +6,10 @@ export const googleAuth = async (req, res, next) => {
     const { username, email, picture } = req.body
 
     try{
-        const isValid = await User.find({ email })
-        if(!isValid){
+        const isValid = await User.findOne({ email })
+        if(isValid){
             const { password, ...rest } = isValid._doc
+            
             const token = jwt.sign({id: rest._id}, process.env.JWT_SECRET)
             res.status(200).cookie('token', token, {
                 httpOnly: true

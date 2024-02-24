@@ -3,16 +3,24 @@ import cors from 'cors'
 import dotenv from 'dotenv'
 import mongoose from "mongoose";
 import authRouter from './routes/auth.route.js'
+import cookieParser from "cookie-parser";
+import bodyParser from 'body-parser'
 
 const app = express()
 
 // Middleware
+dotenv.config()
 app.use(express.json())
 app.use(cors({
     origin: '*',
     credentials: true
 }))
-dotenv.config()
+
+app.use(bodyParser.urlencoded({
+    extended: true
+}))
+
+app.use(cookieParser())
 
 // DATABASE CONNECTION
 mongoose.connect(process.env.MONGO_URL)
