@@ -1,7 +1,7 @@
-import { errorHandler } from "./errorHandler"
+import { errorHandler } from "./errorHandler.js"
 import jwt from 'jsonwebtoken'
 
-const verifyUser = (res, req, next) => {
+const verifyUser = (req, res, next) => {
     const token  = req.cookies.token
     
     if(!token){
@@ -16,3 +16,5 @@ const verifyUser = (res, req, next) => {
         next()
     })
 }
+
+export default verifyUser

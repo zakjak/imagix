@@ -3,6 +3,7 @@ import cors from 'cors'
 import dotenv from 'dotenv'
 import mongoose from "mongoose";
 import authRouter from './routes/auth.route.js'
+import userRouter from './routes/user.route.js'
 import cookieParser from "cookie-parser";
 import bodyParser from 'body-parser'
 
@@ -27,6 +28,7 @@ mongoose.connect(process.env.MONGO_URL)
 .then(console.log('Database Connected'))
 
 app.use('/api/auth', authRouter)
+app.use('/api/user', userRouter)
 
 const PORT = process.env.PORT
 app.listen(PORT, () => {
