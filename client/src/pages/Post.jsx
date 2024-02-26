@@ -1,12 +1,15 @@
 import { Avatar } from 'flowbite-react'
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
-import { FaPlay } from "react-icons/fa";
+import { Link, useParams } from 'react-router-dom'
+import { FaHeart, FaPlay } from "react-icons/fa";
 import EmojiPicker from 'emoji-picker-react'
+import { useSelector } from 'react-redux';
 
 function Post() {
+    const { currentUser } = useSelector(state => state.user)
     const [posts, setPosts] = useState([])
     const [user, setUser] = useState([])
+    const [comments, setComments] = useState([])
     const [comment, setComment] = useState('')
     const [emoji, setEmoji] = useState(false)
 
@@ -15,6 +18,7 @@ function Post() {
     useEffect(() => {
         getPost()
         getUser()
+        getComment()
     }, [postId, posts[0]?.owner])
     
     const getPost = async () => {
@@ -28,12 +32,26 @@ function Post() {
 
       const getUser = async () =>{
         try{
-          const res = await fetch(`/api/user/getUser/${posts[0]?.owner}`)
+          const res = await fetch(`/api/user/getUser/${posts[0].owner}`)
     
           if(res.ok){
             const data = await res.json()
-            console.log(data)
             setUser(data)
+          }
+          
+        }catch(err){
+          console.log(err)
+        }
+      }
+
+    
+      const getComment = async () =>{
+        try{
+          const res = await fetch(`/api/comment/getComment?postId=${posts[0]?._id}`)
+    
+          if(res.ok){
+            const data = await res.json()
+            setComments(data)
           }
           
         }catch(err){
@@ -44,7 +62,7 @@ function Post() {
       const handleSubmit = async(e) => {
         e.preventDefault()
         try{
-            const res = await fetch('/api/comment/createPost', {
+            const res = await fetch('/api/comment/createComment', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({
@@ -55,7 +73,7 @@ function Post() {
             })
             if(res.ok){
                 const data = await res.json()
-                console.log(data)
+                getComment()
                 setComment('')
             }
         }catch(err){
@@ -63,7 +81,22 @@ function Post() {
         }
       }
 
-      console.log(comment)
+      const likeComment = async (commentId) => {
+        try{
+            const res = await fetch(`/api/comment/likeComment/${commentId}/${currentUser._id}`, {
+                method: 'PUT',
+                headers: {'Content-Type': 'application/json'},
+            })
+            if(res.ok){
+                getComment()
+            }
+        }catch(err){
+            console.log(err)
+        }
+      }
+
+
+      
   return (
     <div className='mt-5'>
         <div className="w-[80%]  shadow-md mx-auto p-5 dark:bg-gray-900  rounded-2xl">
@@ -74,17 +107,33 @@ function Post() {
                             <img className='w-full h-full object-cover' src={post.image} alt="" />
                         </div>
                         <div className="md:p-4">
-                            <div className="flex text-sm items-center gap-2">
+                            <Link to={`/profile/${post.owner}`} className="flex text-sm items-center gap-2">
                                 <Avatar className='flex float-start' rounded img={user?.picture} />
                                 <div className="">
                                     <p className=''>{user?.username}</p>
                                     <p className='text-gray-200'>{`${user?.followers?.length}k followers`}</p>
                                 </div>
-                            </div>
+                            </Link>
                             <div className="h-[40%] md:h-[80%]">
                                 <h1 className='text-lg'>{post?.desc}</h1>
                                 <div className="">
-                                    <h1>Comments</h1>
+                                    <h1>Comments: {comments.length}</h1>
+                                    {
+                                        comments?.map(comment => (
+                                            <div key={comment?._id} className="mt-2">
+                                                <p>{comment?.comment}</p>
+                                                <div className="flex items-center gap-4">
+                                                    <div className="text-xl flex items-center gap-1">
+                                                        <FaHeart 
+                                                            className={`cursor-pointer ${comment.likes.includes(currentUser?._id) ? 'text-red-900' : 'text-white'}`} 
+                                                            onClick={() => likeComment(comment?._id)} />
+                                                        <span className='text-sm'>{`${comment?.numberOfLikes > 0 ? comment?.numberOfLikes : ''}`}</span>
+                                                    </div>
+                                                    <div className="text-sm">Reply</div>
+                                                </div>
+                                            </div>
+                                        ))
+                                    }
                                 </div>
                             </div>
                             <div className="mt-2">

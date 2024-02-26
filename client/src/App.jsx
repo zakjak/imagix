@@ -11,8 +11,8 @@ function App() {
     <Routes>
       <Route path='/' element={<NavComponent />}>
         <Route index element={<Home />} />
-        <Route path='/profile/:id' element={<Profile />} />
-        <Route path='/post/:id' element={<Post />} />
+          <Route path='/profile/:id' element={<Profile />} />
+          <Route path='/post/:id' element={<Post />} />
       </Route>
     </Routes>
   )

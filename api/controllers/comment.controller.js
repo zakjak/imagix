@@ -1,7 +1,7 @@
 import Comment from "../models/comment.model.js"
 import { errorHandler } from "../utils/errorHandler.js"
 
-export const createPost = async (req, res, next) => {
+export const createComment = async (req, res, next) => {
     const { postId, comment, owner } = req.body
 
     if(!req.user.id){
@@ -22,5 +22,45 @@ export const createPost = async (req, res, next) => {
 }
 
 export const getComments = async (req, res, next) => {
-    const {  } = req.queries
+    const { postId } = req.query
+
+    try{
+        const comments = await Comment.find({postId}).sort({ createdAt: -1 })
+    
+        res.status(200).json(comments)
+    }catch(err){
+        next(err)
+    }
+}
+
+export const likeComment = async(req, res, next) => {
+    const { commentId, userId } = req.params
+
+    if(req.user.id !== userId){
+        return next(errorHandler(403, 'Login to comment'))
+    }
+
+    if(!commentId || !userId || commentId === '' || userId === ''){
+        return next(errorHandler(403, "Fields can't be empty"))
+    }
+
+    try{
+        const comment = await Comment.findById({_id: commentId})
+        const commentIndex = comment.likes.indexOf(userId)
+
+        if(commentIndex === -1){
+            comment.likes.push(userId)
+            comment.numberOfLikes += 1
+        }else{
+            comment.likes.splice(commentIndex, 1)
+            comment.numberOfLikes -= 1
+        }
+
+        await comment.save()
+
+        res.status(200).json(comment)
+
+    }catch(err){
+        next(err)
+    }
 }

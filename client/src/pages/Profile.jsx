@@ -9,6 +9,7 @@ import EditModal from "../components/EditModal";
 import { LuPlus } from "react-icons/lu";
 import CreateModal from "../components/CreateModal";
 import PostList from "../components/PostList";
+import { useParams } from "react-router-dom";
 
 function Profile() {
   const [openModal, setOpenModal] = useState(false)
@@ -18,6 +19,8 @@ function Profile() {
   const { currentUser } = useSelector(state => state.user)
   const [download, setDownload] = useState('')
   const fileInput = useRef(null)
+
+  const userId = useParams()
 
   const  handleFileUpload = (e) => {
     e.stopPropagation();
@@ -62,11 +65,11 @@ function Profile() {
 
   useEffect(() => {
     getUser()
-  }, [currentUser._id])
+  }, [userId.id])
   
   const getUser = async () =>{
     try{
-      const res = await fetch(`/api/user/getUser/${currentUser._id}`)
+      const res = await fetch(`/api/user/getUser/${userId.id}`)
 
       if(res.ok){
         const data = await res.json()
@@ -95,9 +98,13 @@ const getPost = async () => {
     <div className="w-full min-h-full flex-wrap pb-4">
       <div style={{ backgroundImage: `url(${user?.banner})` }} className={' relative h-[20rem] bg-no-repeat bg-center aspect-auto bg-cover'}>
         <input onChange={handleChange} type="file" className="hidden" ref={fileInput} />
-        <div onClick={handleFileUpload} className="p-3 rounded-full absolute text-gray-400 hover:text-white  bg-black right-2 top-2 cursor-pointer hover:bg-gray-800">
-          <MdEdit />
-        </div>
+        {
+          user?._id === currentUser._id && (
+            <div onClick={handleFileUpload} className="p-3 rounded-full absolute text-gray-400 hover:text-white  bg-black right-2 top-2 cursor-pointer hover:bg-gray-800">
+              <MdEdit />
+            </div>
+          )
+        }
         <div className="w-full bottom-[-6.9rem] items-center lg:bottom-[-8.7rem] absolute md:bottom-[-7.6rem]">
           <div className="w-[94%] mx-auto">
             <div className="flex relative justify-between items-end">
@@ -105,9 +112,17 @@ const getPost = async () => {
                   <img className="w-full h-full object-cover" src={user?.picture} />
               </div>
               <div className="flex overflow-clip gap-4 right mb-2 items-center">
-                <Button color="dark" className="p-0">Follow</Button>
-                <Button color="light" className="p-0"><FaRegEnvelope /></Button>
-                <Button className="p-0" onClick={() => setOpenModal(true)} outline color="dark"><MdEdit /></Button>
+                {
+                  user?._id !== currentUser._id ? (
+                    <>
+                      <Button color="dark" className="p-0">Follow</Button>
+                      <Button color="light" className="p-0"><FaRegEnvelope /></Button>
+                    </>
+
+                  ): (
+                    <Button className="p-0" onClick={() => setOpenModal(true)} outline color="dark"><MdEdit /></Button>
+                  )
+                }
                 <Modal show={openModal} onClose={() => setOpenModal(false)}>
                   <EditModal user={user} getUser={getUser} openModal={openModal} setOpenModal={setOpenModal} />
                 </Modal>

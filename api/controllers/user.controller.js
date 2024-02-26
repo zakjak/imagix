@@ -27,7 +27,7 @@ export const updateUser = async (req, res, next) => {
 export const getUser = async(req, res, next) => {
     const {userId} = req.params
 
-    if(!userId ||  userId === '' || req.user.id !== userId){
+    if(!userId ||  userId === ''){
         return next(errorHandler(404, 'No user found!'))
     }
 
