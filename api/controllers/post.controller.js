@@ -20,12 +20,12 @@ export const createPost = async (req, res, next) => {
 }
 
 export const getPost = async(req, res, next) => {
-    const { ownerId } = req.query
-    console.log(ownerId)
+    const { ownerId, postId } = req.query
 
     try{
         const posts = await Post.find({
-            ...(ownerId && {owner: ownerId})
+            ...(ownerId && {owner: ownerId}),
+            ...(postId && {_id: postId})
         }).sort({createdAt: -1})
     
         res.status(200).json(posts)

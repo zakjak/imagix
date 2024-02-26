@@ -1,10 +1,11 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
 function Card({ post }) {
   return (
-    <div className='rounded-md overflow-hidden'>
+    <Link to={`/post/${post._id}`} className='rounded-md overflow-hidden cursor-pointer'>
         <img src={post.image} alt="" />
-    </div>
+    </Link>
   )
 }
 

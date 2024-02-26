@@ -11,6 +11,10 @@ const PostSchema = new mongoose.Schema({
     },
     owner: {
         type: String
+    },
+    tags: {
+        type: String,
+        default: []
     }
 }, {timestamps: true})
 
