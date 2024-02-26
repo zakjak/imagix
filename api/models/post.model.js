@@ -12,10 +12,10 @@ const PostSchema = new mongoose.Schema({
     owner: {
         type: String
     },
-    tags: {
-        type: String,
-        default: []
-    }
+    // tags: {
+    //     type: String,
+    //     default: []
+    // }
 }, {timestamps: true})
 
 const Post = mongoose.model('Post', PostSchema)

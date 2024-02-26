@@ -1,12 +1,14 @@
-import { Avatar, Textarea } from 'flowbite-react'
+import { Avatar } from 'flowbite-react'
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { FaPlay } from "react-icons/fa";
+import EmojiPicker from 'emoji-picker-react'
 
 function Post() {
     const [posts, setPosts] = useState([])
     const [user, setUser] = useState([])
     const [comment, setComment] = useState('')
+    const [emoji, setEmoji] = useState(false)
 
     const postId = useParams()
 
@@ -39,6 +41,29 @@ function Post() {
         }
       }
 
+      const handleSubmit = async(e) => {
+        e.preventDefault()
+        try{
+            const res = await fetch('/api/comment/createPost', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    comment,
+                    postId: postId.id,
+                    owner: user?._id
+                })
+            })
+            if(res.ok){
+                const data = await res.json()
+                console.log(data)
+                setComment('')
+            }
+        }catch(err){
+            console.log(err)
+        }
+      }
+
+      console.log(comment)
   return (
     <div className='mt-5'>
         <div className="w-[80%]  shadow-md mx-auto p-5 dark:bg-gray-900  rounded-2xl">
@@ -56,22 +81,25 @@ function Post() {
                                     <p className='text-gray-200'>{`${user?.followers?.length}k followers`}</p>
                                 </div>
                             </div>
-                            <div className="h-[80%]">
+                            <div className="h-[40%] md:h-[80%]">
                                 <h1 className='text-lg'>{post?.desc}</h1>
                                 <div className="">
                                     <h1>Comments</h1>
                                 </div>
                             </div>
-                            <div className="mt-2 ">
+                            <div className="mt-2">
                                 <div className="flex items-center border rounded-full h-12 px-2">
-                                    <input value={comment} onChange={e => setComment(e.target.value)} className='max-h-12 outline-none flex-1 bg-transparent' />
-                                    {
-                                        comment && (
-                                            <div className="">
-                                                <FaPlay />
-                                            </div>
-                                        )
-                                    }
+                                    <form onSubmit={handleSubmit} className='flex justify-center items-center w-full'>
+                                        <input value={comment} onChange={e => setComment(e.target.value)} className='max-h-12 outline-none flex-1 bg-transparent' />
+                                        <div onClick={() => setEmoji(!emoji)} className="">ad</div>
+                                        {
+                                            comment && (
+                                                <button type='submit' className="">
+                                                    <FaPlay />
+                                                </button>
+                                            )
+                                        }
+                                    </form>
                                 </div>
                             </div>
                         </div>
