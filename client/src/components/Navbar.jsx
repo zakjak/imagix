@@ -58,7 +58,7 @@ function Navbar() {
         dispatch(signOut())
     }
   return (
-    <nav className="h-16 w-full bg-gray-200 dark:bg-[#0B0C0E] shadow-md flex items-center">
+    <nav className="h-16 w-full overflow-hidden bg-gray-200 dark:bg-[#0B0C0E] shadow-md flex items-center">
          <div className="w-[90%] mx-auto flex justify-between items-center">
             <div className="flex gap-4 items-center">
                 <Link to='/' className="text-xl">
@@ -75,7 +75,7 @@ function Navbar() {
                     {
                         currentUser ? (
                             <Dropdown className="w-[12rem]" label="" dismissOnClick={false} renderTrigger={() => 
-                                <div><Avatar className="cursor-pointer" img={currentUser.picture} rounded alt={`${currentUser.name}`}  /></div>}
+                                <div className="shrink-0"><Avatar className="cursor-pointer" img={currentUser.picture} rounded alt={`${currentUser.name}`}  /></div>}
                             >
                                 <div className="p-4">
                                     <div className="">

@@ -7,7 +7,7 @@ import {
  } from 'flowbite-react'
  import { useState } from 'react'
 
-function EditModal({ openModal, setOpenModal, user }) {
+function EditModal({ openModal, setOpenModal, user, getUser }) {
     const [field, setField] = useState({name: user?.username, bio: user?.bio})
 
     const handleSubmit = async (e) => {
@@ -22,7 +22,10 @@ function EditModal({ openModal, setOpenModal, user }) {
             })
         })
 
-        const data = await res.json
+        if(res.ok){
+            setOpenModal(false)
+            getUser()
+        }
     }
 
     const handleChange = (e) => {
