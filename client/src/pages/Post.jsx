@@ -1,10 +1,11 @@
-import { Avatar } from 'flowbite-react'
+import { Avatar, Button } from 'flowbite-react'
 import React, { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { FaHeart, FaPlay } from "react-icons/fa";
 import EmojiPicker from 'emoji-picker-react'
 import { useSelector } from 'react-redux';
 import { Toast } from 'flowbite-react'; 
+import { numberManipulate } from '../components/Common';
 
 function Post() {
     const { currentUser } = useSelector(state => state.user)
@@ -77,14 +78,14 @@ function Post() {
                 })
 
                 if(res.ok){
-                    const data = await res.json()
                     getComment()
                     setComment('')
                 }
-            }
-            if(!currentUser){
+            }else{
                 setShowCommentToast(true)
+                return;
             }
+
         }catch(err){
             console.log(err)
         }
@@ -101,19 +102,16 @@ function Post() {
                 if(res.ok){
                     getComment()
                 }
-            }
-
-            if(!currentUser){
+            }else{
                 setShowLikeToast(true)
                 return;
             }
+
         }catch(err){
             console.log(err)
         }
       }
 
-
-      
   return (
     <div className='mt-5'>
         <div className="w-[80%]  shadow-md mx-auto p-5 dark:bg-gray-900  rounded-2xl">
@@ -124,17 +122,26 @@ function Post() {
                             <img className='w-full h-full object-cover' src={post.image} alt="" />
                         </div>
                         <div className="md:p-4">
-                            <Link to={`/profile/${post.owner}`} className="flex text-sm items-center gap-2">
-                                <Avatar className='flex float-start' rounded img={user?.picture} />
-                                <div className="">
-                                    <p className=''>{user?.username}</p>
-                                    <p className='text-gray-200'>{`${user?.followers?.length}k followers`}</p>
-                                </div>
-                            </Link>
+                            <div className="flex justify-between ">
+                                <Link to={`/profile/${post.owner}`} className="flex text-sm items-center gap-2">
+                                    <Avatar className='flex float-start' rounded img={user?.picture} />
+                                    <div className="">
+                                        <p className=''>{user?.username}</p>
+                                        <p className='text-gray-200'>{`${user?.followers?.length}k followers`}</p>
+                                    </div>
+                                </Link>
+                                {
+                                    currentUser._id !== user?._id && (
+                                        <Button color='dark'>
+                                            Follow
+                                        </Button>
+                                    )
+                                }
+                            </div>
                             <div className="h-[40%] md:h-[80%]">
                                 <h1 className='text-lg'>{post?.desc}</h1>
                                 <div className="">
-                                    <h1>Comments: {comments.length}</h1>
+                                    <h1>Comments: {comments.length > 0 && numberManipulate(comments.length)}</h1>
                                     {
                                         comments?.map(comment => (
                                             <div key={comment?._id} className="mt-2">
@@ -145,7 +152,7 @@ function Post() {
                                                             title='like'
                                                             className={`cursor-pointer ${comment.likes.includes(currentUser?._id) ? 'text-red-900' : 'text-white'}`} 
                                                             onClick={() => likeComment(comment?._id)} />
-                                                        <span className='text-sm'>{`${comment?.numberOfLikes > 0 ? comment?.numberOfLikes : ''}`}</span>
+                                                        <span className='text-sm'>{`${comment?.numberOfLikes > 0 ? numberManipulate(comment?.numberOfLikes) : ''}`}</span>
                                                     </div>
                                                     <div className="text-sm cursor-pointer" title='reply'>Reply</div>
                                                 </div>
