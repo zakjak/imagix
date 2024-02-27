@@ -11,3 +11,21 @@ export const numberManipulate = (num) => {
         return num
     }
 }
+
+export const follow = async (userId, currentUserId, currentUser, getUser) => {
+    try{
+        if(currentUser){
+            const res = await fetch(`/api/user/getUser/${userId}/${currentUserId}`, {
+                method: 'PUT',
+                headers: {'Content-Type': 'application/json'},
+            })
+
+            if(res.ok){
+              getUser()
+            }
+        }
+
+    }catch(err){
+        console.log(err)
+    }
+  }

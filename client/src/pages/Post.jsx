@@ -2,10 +2,9 @@ import { Avatar, Button } from 'flowbite-react'
 import React, { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { FaHeart, FaPlay } from "react-icons/fa";
-import EmojiPicker from 'emoji-picker-react'
 import { useSelector } from 'react-redux';
 import { Toast } from 'flowbite-react'; 
-import { numberManipulate } from '../components/Common';
+import { follow, numberManipulate } from '../components/Common';
 
 function Post() {
     const { currentUser } = useSelector(state => state.user)
@@ -112,36 +111,47 @@ function Post() {
         }
       }
 
+      
+
+      
   return (
-    <div className='mt-5'>
-        <div className="w-[80%]  shadow-md mx-auto p-5 dark:bg-gray-900  rounded-2xl">
+    <div className='mt-5 mb-10'>
+        <div className="w-[95%] h-[50rem] md:w-[90%] lg:w-[80%] shadow-md mx-auto overflow-hidden dark:bg-gray-900 rounded-[2.5rem]">
             {
                 posts.map(post => (
-                    <div key={post._id} className="grid gap-4 h-[30rem] grid-cols-1 md:grid-cols-2">
-                        <div className="md:w-[90%] w-full mx-auto rounded-xl overflow-hidden">
+                    <div key={post._id} className="grid gap-4 h-full grid-cols-1 md:grid-cols-2">
+                        <div className="w-full h-full">
                             <img className='w-full h-full object-cover' src={post.image} alt="" />
                         </div>
-                        <div className="md:p-4">
-                            <div className="flex justify-between ">
+                        <div className="my-2 md:my-4 mx-6 relative">
+                            <div>
                                 <Link to={`/profile/${post.owner}`} className="flex text-sm items-center gap-2">
                                     <Avatar className='flex float-start' rounded img={user?.picture} />
                                     <div className="">
                                         <p className=''>{user?.username}</p>
-                                        <p className='text-gray-200'>{`${user?.followers?.length}k followers`}</p>
+                                        <p className='dark:text-gray-300 '>
+                                            {`${user?.followers?.length > 0 ?  
+                                                numberManipulate(user?.followers?.length) === 1 ? 
+                                                `${numberManipulate(user?.followers?.length)} follower`: 
+                                                `${numberManipulate(user?.followers?.length)} followers` : ''}`}
+                                        </p>
                                     </div>
                                 </Link>
                                 {
-                                    currentUser._id !== user?._id && (
-                                        <Button color='dark'>
-                                            Follow
+                                    currentUser?._id !== user?._id && (
+                                        <Button color='dark' onClick={() => follow(user?._id, currentUser._id, currentUser, getUser)}>
+                                            {
+                                                user?.following?.includes(currentUser?._id) ? 
+                                                'Following' : 'Follow'
+                                            }
                                         </Button>
                                     )
                                 }
                             </div>
-                            <div className="h-[40%] md:h-[80%]">
-                                <h1 className='text-lg'>{post?.desc}</h1>
-                                <div className="">
-                                    <h1>Comments: {comments.length > 0 && numberManipulate(comments.length)}</h1>
+                            <div className=" mt-2">
+                                <h1 className='text-xl lg:text-2xl md:px-2 w-[90%]'>{post?.desc}</h1>
+                                <div className="mt-4">
+                                    <h1 className='text-lg'>Comments: {comments.length > 0 ? numberManipulate(comments.length) : <p className='font-semibold'>No comments yet</p>}</h1>
                                     {
                                         comments?.map(comment => (
                                             <div key={comment?._id} className="mt-2">
@@ -150,13 +160,21 @@ function Post() {
                                                     <div className="text-xl flex items-center gap-1">
                                                         <FaHeart 
                                                             title='like'
-                                                            className={`cursor-pointer ${comment.likes.includes(currentUser?._id) ? 'text-red-900' : 'text-white'}`} 
+                                                            className={`heart cursor-pointer drop-shadow-2x ${comment.likes.includes(currentUser?._id) ? 'text-red-900' : 'text-white'}`} 
                                                             onClick={() => likeComment(comment?._id)} />
-                                                        <span className='text-sm'>{`${comment?.numberOfLikes > 0 ? numberManipulate(comment?.numberOfLikes) : ''}`}</span>
+                                                        <span 
+                                                            className='text-sm'
+                                                        >
+                                                            {`${comment?.numberOfLikes > 0 ? 
+                                                                numberManipulate(comment?.numberOfLikes) === 1 ? 
+                                                                `${numberManipulate(comment?.numberOfLikes)} like` : 
+                                                                `${numberManipulate(comment?.numberOfLikes)} likes` : ''}`}
+                                                        </span>
                                                     </div>
                                                     <div className="text-sm cursor-pointer" title='reply'>Reply</div>
                                                 </div>
                                                 {
+                                                    
                                                     showLikeToast && (
                                                         <Toast>
                                                             <div className="ml-3 text-sm font-normal">Login to Like Comment</div>
@@ -169,17 +187,16 @@ function Post() {
                                     }
                                 </div>
                             </div>
-                            <div className="mt-2">
+                            <div className="absolute w-full bottom-10 left-0">
                             {showCommentToast && (
                                             <Toast className='absolute bottom-32'>
                                                 <div className="ml-3 text-sm font-normal">Login to Comment</div>
                                                 <Toast.Toggle onDismiss={() => setShowCommentToast(false)} />
                                             </Toast>
                                         )}
-                                <div className="flex items-center border rounded-full h-12 px-2">
+                                <div className="flex items-center border border-gray-600 dark:border-gray-200 rounded-full h-12 px-2">
                                     <form onSubmit={handleSubmit} className='flex justify-center items-center w-full'>
                                         <input value={comment} onChange={e => setComment(e.target.value)} className='max-h-12 outline-none flex-1 bg-transparent' />
-                                        <div onClick={() => setEmoji(!emoji)} className="">ad</div>
                                         {
                                             comment && (
                                                 <button type='submit' className="">
@@ -194,9 +211,6 @@ function Post() {
                     </div>
                 ))
             }
-        </div>
-        <div className="">
-
         </div>
     </div>
   )

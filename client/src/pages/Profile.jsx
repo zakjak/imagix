@@ -10,6 +10,7 @@ import { LuPlus } from "react-icons/lu";
 import CreateModal from "../components/CreateModal";
 import PostList from "../components/PostList";
 import { useParams } from "react-router-dom";
+import { follow } from "../components/Common";
 
 function Profile() {
   const [openModal, setOpenModal] = useState(false)
@@ -115,7 +116,12 @@ const getPost = async () => {
                 {
                   user?._id !== currentUser._id ? (
                     <>
-                      <Button color="dark" className="p-0">Follow</Button>
+                      <Button color="dark" className="p-0" onClick={() => follow(user?._id, currentUser._id, currentUser, getUser)}>
+                      {
+                        user?.following?.includes(currentUser?._id) ? 
+                        'Following' : 'Follow'
+                      }
+                      </Button>
                       <Button color="light" className="p-0"><FaRegEnvelope /></Button>
                     </>
 
@@ -149,9 +155,16 @@ const getPost = async () => {
           <div className="absolute w-[90%] ml-8 mb-2">
             <div className=" w-[60%] flex flex-col items-start">
               <p className="">{user?.bio}</p>
-              <button onClick={() => setCreateModal(true)} className="mt-2 p-2 rounded-full bg-black 
-              dark:bg-gray-100 dark:text-black text-white 
-              text-2xl font-extrabold flex items-center gap-1 cursor-pointer"><LuPlus /></button>
+              {
+                user?._id === currentUser._id &&(
+                  <button onClick={() => setCreateModal(true)} className="mt-2 p-2 rounded-full bg-black 
+                  dark:bg-gray-100 dark:text-black text-white 
+                  text-2xl font-extrabold flex items-center gap-1 cursor-pointer">
+                    <LuPlus />
+                  </button>
+                  
+                )
+              }
             </div>
             <Modal show={openCreateModal} onClose={() => setCreateModal(false)}>
               <CreateModal getPost={getPost} user={user} openCreateModal={openCreateModal} setCreateModal={setCreateModal} />
