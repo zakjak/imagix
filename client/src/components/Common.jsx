@@ -14,7 +14,7 @@ export const numberManipulate = (num) => {
 
 export const follow = async (userId, currentUserId, currentUser, getUser) => {
     try{
-        if(currentUser){
+        if(currentUser && userId && currentUser){
             const res = await fetch(`/api/user/getUser/${userId}/${currentUserId}`, {
                 method: 'PUT',
                 headers: {'Content-Type': 'application/json'},

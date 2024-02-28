@@ -34,6 +34,9 @@ function Post() {
     }
 
       const getUser = async () =>{
+        if(posts[0]?.owner === undefined){
+            return;
+        }
         try{
           const res = await fetch(`/api/user/getUser/${posts[0]?.owner}`)
     
@@ -116,7 +119,7 @@ function Post() {
       
   return (
     <div className='mt-5 mb-10'>
-        <div className="w-[95%] h-[50rem] md:w-[90%] lg:w-[80%] shadow-md mx-auto overflow-hidden dark:bg-gray-900 rounded-[2.5rem]">
+        <div className="w-[95%] h-[70rem] md:h-[50rem] md:w-[90%] lg:w-[80%] shadow-md mx-auto overflow-hidden dark:bg-gray-900 rounded-[2.5rem]">
             {
                 posts.map(post => (
                     <div key={post._id} className="grid gap-4 h-full grid-cols-1 md:grid-cols-2">
@@ -124,7 +127,7 @@ function Post() {
                             <img className='w-full h-full object-cover' src={post.image} alt="" />
                         </div>
                         <div className="my-2 md:my-4 mx-6 relative">
-                            <div>
+                            <div className='flex justify-between'>
                                 <Link to={`/profile/${post.owner}`} className="flex text-sm items-center gap-2">
                                     <Avatar className='flex float-start' rounded img={user?.picture} />
                                     <div className="">
@@ -137,16 +140,16 @@ function Post() {
                                         </p>
                                     </div>
                                 </Link>
-                                {
-                                    currentUser?._id !== user?._id && (
-                                        <Button color='dark' onClick={() => follow(user?._id, currentUser._id, currentUser, getUser)}>
-                                            {
-                                                user?.following?.includes(currentUser?._id) ? 
-                                                'Following' : 'Follow'
-                                            }
-                                        </Button>
-                                    )
-                                }
+                                    {
+                                        currentUser?._id !== user?._id && (
+                                            <Button color='dark' onClick={() => follow(user?._id, currentUser?._id, currentUser, getUser)}>
+                                                {
+                                                    user?.followers?.includes(currentUser?._id) ? 
+                                                    'Following' : 'Follow'
+                                                }
+                                            </Button>
+                                        )
+                                    }
                             </div>
                             <div className=" mt-2">
                                 <h1 className='text-xl lg:text-2xl md:px-2 w-[90%]'>{post?.desc}</h1>
