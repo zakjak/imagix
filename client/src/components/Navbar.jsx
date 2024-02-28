@@ -7,6 +7,7 @@ import {loginStart, loginSuccess, loginFailure, signOut} from '../redux/user/use
 import { IoLogOutOutline } from "react-icons/io5";
 import { FaMoon, FaSun } from 'react-icons/fa'
 import { Link } from "react-router-dom"
+import Search from "./Search"
 
 function Navbar() {
     const dispatch = useDispatch()
@@ -60,13 +61,12 @@ function Navbar() {
   return (
     <nav className="h-16 w-full overflow-hidden bg-gray-200 dark:bg-[#0B0C0E] shadow-md flex items-center">
          <div className="w-[90%] mx-auto flex justify-between items-center">
-            <div className="flex gap-4 items-center">
+            <div className="flex items-center flex-1">
                 <Link to='/' className="text-xl">
                     Ima<span className="text-2xl bg-gradient-to-r from-blue-500 to-red-300 text-transparent bg-clip-text">gix</span>
                 </Link>
-                <div className="">
-                    Search
-                </div>
+                
+                <Search />
             </div>
             <div className="flex gap-3">
                     <span className="flex items-center cursor-pointer focus:border" onClick={() => dispatch(toggleTheme())}>

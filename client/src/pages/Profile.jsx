@@ -9,7 +9,7 @@ import EditModal from "../components/EditModal";
 import { LuPlus } from "react-icons/lu";
 import CreateModal from "../components/CreateModal";
 import PostList from "../components/PostList";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { follow } from "../components/Common";
 
 function Profile() {
@@ -137,14 +137,14 @@ const getPost = async () => {
             <div className="flex justify-between">
               <h2 className="font-semibold text-md ml-4 lg:ml-12 md:text-lg whitespace-nowrap">{currentUser?.username}</h2>
               <div className="flex gap-4 overflow-clip">
-                <div className='flex items-baseline gap-1 cursor-pointer'>
+                <Link to={`/profile/${user?._id}/following`} className='flex items-baseline gap-1'>
                   <span className="text-lg dark:text-gray-300 font-semibold">{user?.following?.length}</span>
                   <span className="text-xs font-semibold">Following</span>
-                </div>
-                <div className="flex items-baseline gap-1 cursor-pointer">
+                </Link>
+                <Link to={`/profile/${user?._id}/followers`} className="flex items-baseline gap-1">
                   <span className="dark:text-gray-300 text-lg font-semibold">{user?.followers?.length}</span>
                   <span className="text-xs font-semibold">Followers</span>
-                </div>
+                </Link>
                 <div className="flex items-baseline gap-1">
                   <span className="dark:text-gray-300 text-lg font-semibold">{posts.length}</span>
                   <span className="text-xs font-semibold">Posts</span>
@@ -152,33 +152,33 @@ const getPost = async () => {
               </div>
             </div>
           </div>
-          <div className="absolute w-[90%] ml-8 mb-2">
-            <div className=" w-[60%] flex flex-col items-start">
-              <p className="">{user?.bio}</p>
-              {
-                user?._id === currentUser._id &&(
-                  <button onClick={() => setCreateModal(true)} className="mt-2 p-2 rounded-full bg-black 
-                  dark:bg-gray-100 dark:text-black text-white 
-                  text-2xl font-extrabold flex items-center gap-1 cursor-pointer">
-                    <LuPlus />
-                  </button>
-                  
-                )
-              }
+          <div className="absolute w-full mb-2 mt-4">
+            <div className="w-[87%] mx-auto">
+              <div className=" w-[60%] flex flex-col items-start">
+                <p className="">{user?.bio}</p>
+                {
+                  user?._id === currentUser._id &&(
+                    <button onClick={() => setCreateModal(true)} className="mt-4 p-2 rounded-full bg-black 
+                    dark:bg-gray-100 dark:text-black text-white 
+                    text-2xl font-extrabold flex items-center gap-1 cursor-pointer">
+                      <LuPlus />
+                    </button>
+                  )
+                }
+              </div>
+              <Modal show={openCreateModal} onClose={() => setCreateModal(false)}>
+                <CreateModal getPost={getPost} user={user} openCreateModal={openCreateModal} setCreateModal={setCreateModal} />
+              </Modal>
+              <div className="mb-10">
+                {
+                  posts && (
+                    <div className="mt-6">
+                      <PostList posts={posts} />
+                    </div>
+                  )
+                }
+              </div>
             </div>
-            <Modal show={openCreateModal} onClose={() => setCreateModal(false)}>
-              <CreateModal getPost={getPost} user={user} openCreateModal={openCreateModal} setCreateModal={setCreateModal} />
-            </Modal>
-            <div className="mb-10">
-            {
-              posts && (
-                <div className="mt-4">
-                  <PostList posts={posts} />
-                </div>
-              )
-            }
-          </div>
-
           </div>
           
         </div>

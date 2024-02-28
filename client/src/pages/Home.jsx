@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import PostList from '../components/PostList'
+import InfiniteScroll from "react-infinite-scroll";
 
 function Home() {
   const [posts, setPosts] = useState([])
@@ -13,7 +14,7 @@ const getPost = async () => {
     const data = await res.json()
 
     if(res.ok){
-        setPosts(data)
+        setPosts([...data, ...data])
     }
 }
 

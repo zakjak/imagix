@@ -13,7 +13,8 @@ function App() {
           <Route index element={<Home />} />
           <Route path='/profile/:id' element={<Profile />} />
           <Route path='/post/:id' element={<Post />} />
-          <Route path='/profile/:id/friends' element={<FollowPage />} />
+          <Route path='/profile/:id/following' element={<FollowPage />} />
+          <Route path='/profile/:id/followers' element={<FollowPage />} />
       </Route>
     </Routes>
   )
