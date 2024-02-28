@@ -4,6 +4,7 @@ import NavComponent from './components/NavComponent'
 import Profile from './pages/Profile'
 import Post from './pages/Post'
 import FollowPage from './pages/FollowPage'
+import SearchIterms from './components/SearchIterms'
 
 function App() {
 
@@ -15,6 +16,7 @@ function App() {
           <Route path='/post/:id' element={<Post />} />
           <Route path='/profile/:id/following' element={<FollowPage />} />
           <Route path='/profile/:id/followers' element={<FollowPage />} />
+          <Route path='/search' element={<SearchIterms />} />
       </Route>
     </Routes>
   )
