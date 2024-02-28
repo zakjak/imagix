@@ -118,7 +118,7 @@ const getPost = async () => {
                     <>
                       <Button color="dark" className="p-0" onClick={() => follow(user?._id, currentUser._id, currentUser, getUser)}>
                       {
-                        user?.following?.includes(currentUser?._id) ? 
+                        user?.followers?.includes(currentUser?._id) ? 
                         'Following' : 'Follow'
                       }
                       </Button>
@@ -137,17 +137,17 @@ const getPost = async () => {
             <div className="flex justify-between">
               <h2 className="font-semibold text-md ml-4 lg:ml-12 md:text-lg whitespace-nowrap">{currentUser?.username}</h2>
               <div className="flex gap-4 overflow-clip">
-                <div className='flex flex-col text-center'>
+                <div className='flex items-baseline gap-1 cursor-pointer'>
                   <span className="text-lg dark:text-gray-300 font-semibold">{user?.following?.length}</span>
-                  <span>Following</span>
+                  <span className="text-xs font-semibold">Following</span>
                 </div>
-                <div className="flex flex-col text-center">
+                <div className="flex items-baseline gap-1 cursor-pointer">
                   <span className="dark:text-gray-300 text-lg font-semibold">{user?.followers?.length}</span>
-                  <span>Followers</span>
+                  <span className="text-xs font-semibold">Followers</span>
                 </div>
-                <div className="flex flex-col text-center">
+                <div className="flex items-baseline gap-1">
                   <span className="dark:text-gray-300 text-lg font-semibold">{posts.length}</span>
-                  <span>Posts</span>
+                  <span className="text-xs font-semibold">Posts</span>
                 </div>
               </div>
             </div>
