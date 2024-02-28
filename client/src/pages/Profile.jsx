@@ -146,7 +146,7 @@ const getPost = async () => {
                   <span>Followers</span>
                 </div>
                 <div className="flex flex-col text-center">
-                  <span className="dark:text-gray-300 text-lg font-semibold">0</span>
+                  <span className="dark:text-gray-300 text-lg font-semibold">{posts.length}</span>
                   <span>Posts</span>
                 </div>
               </div>
