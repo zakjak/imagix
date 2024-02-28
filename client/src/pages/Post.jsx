@@ -5,6 +5,7 @@ import { FaHeart, FaPlay } from "react-icons/fa";
 import { useSelector } from 'react-redux';
 import { Toast } from 'flowbite-react'; 
 import { follow, numberManipulate } from '../components/Common';
+import Comment from '../components/Comment';
 
 function Post() {
     const { currentUser } = useSelector(state => state.user)
@@ -14,7 +15,6 @@ function Post() {
     const [comment, setComment] = useState('')
     const [showLikeToast, setShowLikeToast] = useState(false)
     const [showCommentToast, setShowCommentToast] = useState(false)
-    const [emoji, setEmoji] = useState(false)
 
     const postId = useParams()
 
@@ -38,7 +38,7 @@ function Post() {
             return;
         }
         try{
-          const res = await fetch(`/api/user/getUser/${posts[0]?.owner}`)
+          const res = await fetch(`/api/user/getUser?userId=${posts[0]?.owner}`)
     
           if(res.ok){
             const data = await res.json()
@@ -94,15 +94,23 @@ function Post() {
       }
 
       const likeComment = async (commentId) => {
+        console.log(commentId)
         try{
             if(currentUser){
                 const res = await fetch(`/api/comment/likeComment/${commentId}/${currentUser?._id}`, {
                     method: 'PUT',
-                    headers: {'Content-Type': 'application/json'},
                 })
 
                 if(res.ok){
-                    getComment()
+                    const data = await res.json()
+                    setComments(comments.map((comment) => 
+                        comment._id === commentId ? {
+                            ...comment,
+                            likes: data.likes,
+                            numberOfLikes: data.likes.length
+                        }
+                        :comment 
+                    ))
                 }
             }else{
                 setShowLikeToast(true)
@@ -121,30 +129,30 @@ function Post() {
     <div className='mt-5 mb-10'>
         <div className="w-[95%] h-[70rem] md:h-[50rem] md:w-[90%] lg:w-[80%] shadow-md mx-auto overflow-hidden dark:bg-gray-900 rounded-[2.5rem]">
             {
-                posts.map(post => (
-                    <div key={post._id} className="grid gap-4 h-full grid-cols-1 md:grid-cols-2">
+                posts?.map(post => (
+                    <div key={post?._id} className="grid gap-4 h-full grid-cols-1 md:grid-cols-2">
                         <div className="w-full h-full">
                             <img className='w-full h-full object-cover' src={post.image} alt="" />
                         </div>
                         <div className="my-2 md:my-4 mx-6 relative">
                             <div className='flex justify-between'>
                                 <Link to={`/profile/${post.owner}`} className="flex text-sm items-center gap-2">
-                                    <Avatar className='flex float-start' rounded img={user?.picture} />
+                                    <Avatar className='flex float-start' rounded img={user[0]?.picture} />
                                     <div className="">
-                                        <p className=''>{user?.username}</p>
+                                        <p className=''>{user[0]?.username}</p>
                                         <p className='dark:text-gray-300 '>
-                                            {`${user?.followers?.length > 0 ?  
-                                                numberManipulate(user?.followers?.length) === 1 ? 
-                                                `${numberManipulate(user?.followers?.length)} follower`: 
-                                                `${numberManipulate(user?.followers?.length)} followers` : ''}`}
+                                            {`${user[0]?.followers?.length > 0 ?  
+                                                numberManipulate(user[0]?.followers?.length) === 1 ? 
+                                                `${numberManipulate(user[0]?.followers?.length)} follower`: 
+                                                `${numberManipulate(user[0]?.followers?.length)} followers` : ''}`}
                                         </p>
                                     </div>
                                 </Link>
                                     {
-                                        currentUser?._id !== user?._id && (
-                                            <Button color='dark' onClick={() => follow(user?._id, currentUser?._id, currentUser, getUser)}>
+                                        currentUser?._id !== user[0]?._id && (
+                                            <Button color='dark' onClick={() => follow(user[0]?._id, currentUser?._id, currentUser, setUser, user)}>
                                                 {
-                                                    user?.followers?.includes(currentUser?._id) ? 
+                                                    user[0]?.followers?.includes(currentUser?._id) ? 
                                                     'Following' : 'Follow'
                                                 }
                                             </Button>
@@ -154,40 +162,21 @@ function Post() {
                             <div className=" mt-2">
                                 <h1 className='text-xl lg:text-2xl md:px-2 w-[90%]'>{post?.desc}</h1>
                                 <div className="mt-4">
-                                    <h1 className='text-lg'>Comments: {comments.length > 0 ? numberManipulate(comments.length) : <p className='font-semibold'>No comments yet</p>}</h1>
                                     {
-                                        comments?.map(comment => (
-                                            <div key={comment?._id} className="mt-2">
-                                                <p>{comment?.comment}</p>
-                                                <div className="flex items-center gap-4">
-                                                    <div className="text-xl flex items-center gap-1">
-                                                        <FaHeart 
-                                                            title='like'
-                                                            className={`heart cursor-pointer drop-shadow-2x ${comment.likes.includes(currentUser?._id) ? 'text-red-900' : 'text-white'}`} 
-                                                            onClick={() => likeComment(comment?._id)} />
-                                                        <span 
-                                                            className='text-sm'
-                                                        >
-                                                            {`${comment?.numberOfLikes > 0 ? 
-                                                                numberManipulate(comment?.numberOfLikes) === 1 ? 
-                                                                `${numberManipulate(comment?.numberOfLikes)} like` : 
-                                                                `${numberManipulate(comment?.numberOfLikes)} likes` : ''}`}
-                                                        </span>
-                                                    </div>
-                                                    <div className="text-sm cursor-pointer" title='reply'>Reply</div>
-                                                </div>
-                                                {
-                                                    
-                                                    showLikeToast && (
-                                                        <Toast>
-                                                            <div className="ml-3 text-sm font-normal">Login to Like Comment</div>
-                                                            <Toast.Toggle onDismiss={() => setShowLikeToast(false)} />
-                                                        </Toast>
-                                                    )
-                                                }
-                                            </div>
-                                        ))
+                                        comments.length === 0 ?(
+                                            <h1 className='text-lg'><p className='font-semibold'>No comments yet</p></h1>
+                                        ): (
+                                            <>
+                                            <h1>Comments: {numberManipulate(comments.length)}</h1>
+                                            {
+                                                comments.map(comment => (
+                                                    <Comment likeComment={likeComment} setShowLikeToast={setShowLikeToast} currentUser={currentUser} showLikeToast={showLikeToast} key={comment.id} comment={comment}  />
+                                                ))
+                                            }
+                                        </>
+                                        )
                                     }
+                                    
                                 </div>
                             </div>
                             <div className="absolute w-full bottom-10 left-0">

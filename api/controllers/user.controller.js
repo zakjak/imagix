@@ -25,17 +25,26 @@ export const updateUser = async (req, res, next) => {
 }
 
 export const getUser = async(req, res, next) => {
-    const {userId} = req.params
+    const { userId, searchTerm, order, limits } = req.query
 
     if(!userId || userId === ''){
         return next(errorHandler(404, 'No user found!'))
     }
 
     try{
-        const user = await User.findById(userId)
-        const { password, ...rest } = user._doc
+        const sorDirection = parseInt(order) === 'asc' ? 1 : 1
+        const limit = parseInt(limits) || 9
+        const user = await User.find({
+            ...(userId && {_id: userId}),
+            ...(searchTerm && {
+                $or: [
+                    {username: {$regex: `${searchTerm}`, $option: 'i'}}
+                ]
+            })
+        }).sort({ createdAt: sorDirection }).limit(limit)
+        const { password, ...rest } = user[0]._doc
     
-        res.status(200).json(rest)
+        res.status(200).json([rest])
     }catch(err){
         console.log(err)
     }
@@ -87,7 +96,6 @@ export const followUser = async(req, res, next) =>{
                 following.following.splice(followingIndex, 1)
                 follower.followers.splice(followerIndex, 1)
             }
-    
             await following.save()
             res.status(200).json(following)
         }

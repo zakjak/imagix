@@ -5,7 +5,7 @@ import { followUser, getUser, updateUser } from '../controllers/user.controller.
 const router = express.Router()
 
 router.put('/update/:userId', verifyUser, updateUser)
-router.get('/getUser/:userId', getUser)
+router.get('/getUser', getUser)
 router.put('/getUser/:followerId/:userId', verifyUser, followUser)
 
 
