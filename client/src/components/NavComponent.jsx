@@ -4,10 +4,10 @@ import Navbar from './Navbar'
 function NavComponent() {
 
   return (
-    <>
+    <div>
         <Navbar />
         <Outlet />
-    </>
+    </div>
   )
 }
 

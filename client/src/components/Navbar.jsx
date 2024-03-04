@@ -59,7 +59,7 @@ function Navbar() {
         dispatch(signOut())
     }
   return (
-    <nav className="sticky bottom-0 z-50 h-16 w-full overflow-hidden bg-gray-200 dark:bg-[#0B0C0E] shadow-md flex items-center">
+    <nav className="z-50 h-16 w-full overflow-hidden bg-gray-200 dark:bg-[#0B0C0E] shadow-md flex items-center">
          <div className="w-[90%] mx-auto flex justify-between items-center">
             <div className="flex items-center flex-1">
                 <Link to='/' className="text-xl">

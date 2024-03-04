@@ -76,7 +76,7 @@ function Post() {
                     body: JSON.stringify({
                         comment,
                         postId: postId.id,
-                        owner: user?._id
+                        owner: currentUser?._id
                     })
                 })
 
@@ -121,7 +121,6 @@ function Post() {
             console.log(err)
         }
       }
-
       
   return (
     <div className='my-6 w-[80%] mx-auto bg-gray-300 dark:bg-gray-900 rounded-xl'>
