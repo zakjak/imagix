@@ -1,16 +1,18 @@
 import { useSelector } from "react-redux"
 import { MdEdit } from "react-icons/md";
 import { useEffect, useRef, useState } from 'react'
-import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage"
-import { app } from "../firebase";
 import { Button, Modal } from 'flowbite-react'
 import { FaRegEnvelope } from 'react-icons/fa'
 import EditModal from "../components/EditModal";
 import { LuPlus } from "react-icons/lu";
 import CreateModal from "../components/CreateModal";
-import PostList from "../components/PostList";
 import { Link, useParams } from "react-router-dom";
 import { follow } from "../components/Common";
+import { useInfiniteQuery } from '@tanstack/react-query'
+import { useInView } from 'react-intersection-observer'
+import Card from '../components/Card'
+import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage"
+import { app } from "../firebase";
 
 function Profile() {
   const [openModal, setOpenModal] = useState(false)
@@ -18,8 +20,11 @@ function Profile() {
   const [openCreateModal, setCreateModal] = useState(false)
   const [user, setUser] = useState([])
   const { currentUser } = useSelector(state => state.user)
-  const [download, setDownload] = useState('')
   const fileInput = useRef(null)
+
+  const { inView, ref: refView } = useInView()
+
+  
 
   const userId = useParams()
 
@@ -27,41 +32,7 @@ function Profile() {
     e.stopPropagation();
     fileInput.current.click();
   }
-
-  const handleChange = (e) => {
-    const file = e.target.files[0]
-    const storage = getStorage(app)
-
-    const fileName = file.name + new Date().getTime()
-
-    const metadata = {
-      contentType: 'image/jpeg'
-    };
-
-    const storageRef = ref(storage, fileName)
-
-    const uploadTask = uploadBytesResumable(storageRef, file, metadata)
-
-    uploadTask.on('state_changed', (snapshot) => {
-      
-    }, (error) => {
-      console.log(error)
-    }, () => {
-      getDownloadURL(uploadTask.snapshot.ref).then((downloadUrl) => {
-        fetch(`/api/user/update/${currentUser._id}`, {
-          method: 'PUT',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({
-            banner: downloadUrl
-          })
-        }).then(res => res.json())
-        .then(data => {
-          setUser(prev => ({...prev, banner: data.banner}))
-          getUser()
-        })
-      })
-    })
-  }
+  
 
 
   useEffect(() => {
@@ -82,18 +53,79 @@ function Profile() {
     }
   }
 
-  useEffect(() => {
-    getPost()
-}, [user[0]?._id])
 
-const getPost = async () => {
-    const res = await fetch(`/api/post/getPost?ownerId=${user[0]?._id}`)
-    const data = await res.json()
-
-    if(res.ok){
-      setPosts(data)
+  const getPost = async ({ pageParam }) => {
+    if(pageParam){
+      const res = await fetch(`/api/post/getPost?ownerId=${userId.id}&limits=${pageParam * 9}`)
+      return await res.json()
     }
 }
+
+const { 
+  data, status, error, fetchNextPage, hasNextPage
+} = useInfiniteQuery({
+  queryKey: ['posts'],
+  queryFn: getPost,
+  initialPageParam: 1,
+  getNextPageParam: (lastPage, allPages) => {
+    const nextPage = lastPage?.posts.length ? allPages[0]?.posts.length + 1 : undefined
+    return nextPage
+  }
+})
+
+const content = data?.pages.map(posts => 
+  posts?.posts?.map((post, i) => {
+    if(posts?.posts.length === i + 1){
+      return <Card  post={post} key={post._id} innerRef={refView}  />
+    }else{
+      return <Card key={post._id} post={post} />
+    }
+})
+)
+
+  useEffect(() => {
+    if(inView && hasNextPage){
+      fetchNextPage()
+    }
+  }, [inView, hasNextPage, fetchNextPage])
+
+  const handleChange = (e) => {
+    const file = e.target.files[0]
+    const storage = getStorage(app)
+    const { currentUser } = useSelector(state => state.user)
+
+    const fileName = file.name + new Date().getTime()
+
+    const metadata = {
+      contentType: 'image/jpeg'
+    };
+
+    const storageRef = ref(storage, fileName)
+
+    const uploadTask = uploadBytesResumable(storageRef, file, metadata)
+
+    uploadTask.on('state_changed', (snapshot) => {
+      
+    }, (error) => {
+      console.log(error)
+    }, () => {
+      getDownloadURL(uploadTask.snapshot.ref).then((downloadUrl) => {
+        console.log(downloadUrl)
+        fetch(`/api/user/update/${currentUser._id}`, {
+          method: 'PUT',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({
+            banner: downloadUrl
+          })
+        }).then(res => res.json())
+        .then(data => {
+          setUser(prev => ({...prev, banner: data.banner}))
+          getUser()
+        })
+      })
+    })
+  }
+
 
   return (
     <div className="w-full min-h-full flex-wrap pb-4">
@@ -130,7 +162,7 @@ const getPost = async () => {
                   )
                 }
                 <Modal show={openModal} onClose={() => setOpenModal(false)}>
-                  <EditModal user={user} getUser={getUser} openModal={openModal} setOpenModal={setOpenModal} />
+                  <EditModal user={user[0]} getUser={getUser} openModal={openModal} setOpenModal={setOpenModal} />
                 </Modal>
               </div>
             </div>
@@ -141,12 +173,12 @@ const getPost = async () => {
                   <span className="text-lg dark:text-gray-300 font-semibold">{user[0]?.following?.length}</span>
                   <span className="text-xs font-semibold">Following</span>
                 </Link>
-                <Link to={`/profile/${user[0]?._id}/followers`} className="flex items-baseline gap-1">
+                <Link onClick={() => handleFollowers(user[0]?.following)} to={`/profile/${user[0]?._id}/followers`} className="flex items-baseline gap-1">
                   <span className="dark:text-gray-300 text-lg font-semibold">{user[0]?.followers?.length}</span>
                   <span className="text-xs font-semibold">Followers</span>
                 </Link>
                 <div className="flex items-baseline gap-1">
-                  <span className="dark:text-gray-300 text-lg font-semibold">{posts.length}</span>
+                  <span className="dark:text-gray-300 text-lg font-semibold">{data?.pages[0].postCount}</span>
                   <span className="text-xs font-semibold">Posts</span>
                 </div>
               </div>
@@ -167,13 +199,13 @@ const getPost = async () => {
                 }
               </div>
               <Modal show={openCreateModal} onClose={() => setCreateModal(false)}>
-                <CreateModal getPost={getPost} user={user} openCreateModal={openCreateModal} setCreateModal={setCreateModal} />
+                <CreateModal getPost={getPost} user={user[0]} openCreateModal={openCreateModal} setCreateModal={setCreateModal} />
               </Modal>
               <div className="mb-10">
                 {
                   posts && (
-                    <div className="mt-6">
-                      <PostList posts={posts} />
+                    <div className='w-[80%] overflow-hidden mx-auto mt-5 grid grid-cols-2 gap-2 md:grid-cols-3'>
+                      {content}
                     </div>
                   )
                 }

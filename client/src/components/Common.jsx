@@ -38,3 +38,5 @@ export const follow = async (userId, currentUserId, currentUser, setUser,user) =
         console.log(err)
     }
   }
+
+  

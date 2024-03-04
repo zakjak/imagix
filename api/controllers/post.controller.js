@@ -21,7 +21,6 @@ export const createPost = async (req, res, next) => {
 
 export const getPost = async(req, res, next) => {
     const { ownerId, postId, order, limits, startIndex, searchTerm } = req.query
-
     try{
         const direction = parseInt(order) === 'asc' ? 1 : -1
         const limit = parseInt(limits) || 9
@@ -36,8 +35,10 @@ export const getPost = async(req, res, next) => {
             })
         }).sort({createdAt: direction})
         .skip(start).limit(limit)
-    
-        res.status(200).json(posts)
+
+        const postCount = await Post.find({ owner: ownerId }).countDocuments()
+
+        res.status(200).json({posts, postCount})
     }catch(err){
         next(err)
     }

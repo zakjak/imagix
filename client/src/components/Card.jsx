@@ -1,14 +1,11 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-function Card({ post }) {
-  const heights = [150, 30, 90, 70, 90, 100, 150, 30, 50, 80];
+function Card({ post, innerRef, ...props }) {
   return (
-
-    <Link to={`/post/${post._id}`} className='rounded-md shadow-2xl overflow-hidden cursor-pointer'>
-        <img src={post.image} alt="" />
+    <Link ref={innerRef} {...props} key={post._id} to={`/post/${post._id}`} className='w-full h-full cursor-pointer rounded-md shadow-2xl overflow-hidden'>
+        <img className='w-full h-full object-cover' src={post.image} alt="" />
     </Link>
-        
   )
 }
 

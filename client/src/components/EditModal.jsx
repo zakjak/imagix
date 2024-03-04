@@ -49,7 +49,7 @@ function EditModal({ openModal, setOpenModal, user, getUser }) {
                         <div className="flex flex-col gap-2">
                             <Label>Bio:</Label>
                             <Textarea id='bio' value={field.bio} onChange={handleChange} />
-                            <p className='text-gray-400 text-sm text-right'>{`${200 - field.bio.length} characters left`}</p>
+                            <p className='text-gray-400 text-sm text-right'>{`${200 - field?.bio?.length} characters left`}</p>
                         </div>
                         </>
                     )

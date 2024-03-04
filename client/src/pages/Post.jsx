@@ -27,9 +27,10 @@ function Post() {
     const getPost = async () => {
         const res = await fetch(`/api/post/getPost?postId=${postId?.id}`)
         const data = await res.json()
+        // console.log(data.posts)
     
         if(res.ok){
-            setPosts(data)
+            setPosts(data.posts)
         }
     }
 
@@ -94,7 +95,6 @@ function Post() {
       }
 
       const likeComment = async (commentId) => {
-        console.log(commentId)
         try{
             if(currentUser){
                 const res = await fetch(`/api/comment/likeComment/${commentId}/${currentUser?._id}`, {
@@ -121,8 +121,6 @@ function Post() {
             console.log(err)
         }
       }
-
-      
 
       
   return (
@@ -170,7 +168,7 @@ function Post() {
                                             <h1>Comments: {numberManipulate(comments.length)}</h1>
                                             {
                                                 comments.map(comment => (
-                                                    <Comment likeComment={likeComment} setShowLikeToast={setShowLikeToast} currentUser={currentUser} showLikeToast={showLikeToast} key={comment.id} comment={comment}  />
+                                                    <Comment key={comment._id} likeComment={likeComment} setShowLikeToast={setShowLikeToast} currentUser={currentUser} showLikeToast={showLikeToast} comment={comment}  />
                                                 ))
                                             }
                                         </>
