@@ -124,42 +124,43 @@ function Post() {
 
       
   return (
-    <div className='mt-5 mb-10'>
-        <div className="w-[95%] h-[70rem] md:h-[50rem] md:w-[90%] lg:w-[80%] shadow-md mx-auto overflow-hidden dark:bg-gray-900 rounded-[2.5rem]">
+    <div className='my-6 w-[80%] mx-auto bg-gray-300 dark:bg-gray-900 rounded-xl'>
             {
                 posts?.map(post => (
-                    <div key={post?._id} className="grid gap-4 h-full grid-cols-1 md:grid-cols-2">
-                        <div className="w-full h-full">
+                    <div key={post?._id} className="w-[95%] mx-auto rounded-xl">
+                        <div className="pt-4 flex justify-between">
+                        <Link to={`/profile/${post.owner}`} className="flex text-sm items-center gap-2">
+                            <Avatar className='float-start' rounded img={user[0]?.picture} />
+                            <div className="flex flex-col">
+                                <p>{user[0]?.username}</p>
+                                <p className='dark:text-gray-300 text-xs'>
+                                    {`${user[0]?.followers?.length > 0 ?  
+                                        numberManipulate(user[0]?.followers?.length) === 1 ? 
+                                        `${numberManipulate(user[0]?.followers?.length)} follower`: 
+                                        `${numberManipulate(user[0]?.followers?.length)} followers` : ''}`}
+                                </p>
+                            </div>
+                        </Link>
+                        <div className='flex justify-between'>
+                            {
+                                currentUser?._id !== user[0]?._id && (
+                                    <Button color='dark' onClick={() => follow(user[0]?._id, currentUser?._id, currentUser, setUser, user)}>
+                                        {
+                                            user[0]?.followers?.includes(currentUser?._id) ? 
+                                            'Following' : 'Follow'
+                                        }
+                                    </Button>
+                                )
+                            }
+                            </div>
+                        </div>
+                        <div className="mt-2">
+                            <p className='text-base md:px-2 w-[90%]'>{post?.desc}</p>
+                        </div>
+                        <div className="w-full mt-4 h-[30rem]">
                             <img className='w-full h-full object-cover' src={post.image} alt="" />
                         </div>
-                        <div className="my-2 md:my-4 mx-6 relative">
-                            <div className='flex justify-between'>
-                                <Link to={`/profile/${post.owner}`} className="flex text-sm items-center gap-2">
-                                    <Avatar className='flex float-start' rounded img={user[0]?.picture} />
-                                    <div className="">
-                                        <p className=''>{user[0]?.username}</p>
-                                        <p className='dark:text-gray-300 '>
-                                            {`${user[0]?.followers?.length > 0 ?  
-                                                numberManipulate(user[0]?.followers?.length) === 1 ? 
-                                                `${numberManipulate(user[0]?.followers?.length)} follower`: 
-                                                `${numberManipulate(user[0]?.followers?.length)} followers` : ''}`}
-                                        </p>
-                                    </div>
-                                </Link>
-                                    {
-                                        currentUser?._id !== user[0]?._id && (
-                                            <Button color='dark' onClick={() => follow(user[0]?._id, currentUser?._id, currentUser, setUser, user)}>
-                                                {
-                                                    user[0]?.followers?.includes(currentUser?._id) ? 
-                                                    'Following' : 'Follow'
-                                                }
-                                            </Button>
-                                        )
-                                    }
-                            </div>
-                            <div className=" mt-2">
-                                <h1 className='text-xl lg:text-2xl md:px-2 w-[90%]'>{post?.desc}</h1>
-                                <div className="mt-4">
+                        <div className="mt-2">
                                     {
                                         comments.length === 0 ?(
                                             <h1 className='text-lg'><p className='font-semibold'>No comments yet</p></h1>
@@ -174,10 +175,9 @@ function Post() {
                                         </>
                                         )
                                     }
-                                    
                                 </div>
-                            </div>
-                            <div className="absolute w-full bottom-10 left-0">
+                        <div className="py-6">
+                            <div className="">
                             {showCommentToast && (
                                             <Toast className='absolute bottom-32'>
                                                 <div className="ml-3 text-sm font-normal">Login to Comment</div>
@@ -186,7 +186,9 @@ function Post() {
                                         )}
                                 <div className="flex items-center border border-gray-600 dark:border-gray-200 rounded-full h-12 px-2">
                                     <form onSubmit={handleSubmit} className='flex justify-center items-center w-full'>
-                                        <input value={comment} onChange={e => setComment(e.target.value)} className='max-h-12 outline-none flex-1 bg-transparent' />
+                                        <div className="max-h-12 px-3 outline-none flex-1 bg-transparent">
+                                            <input className='w-full bg-transparent outline-none' placeholder={`Write your comment, ${user[0]?.username.split(' ')[0]}`} value={comment} onChange={e => setComment(e.target.value)} />
+                                        </div>
                                         {
                                             comment && (
                                                 <button type='submit' className="">
@@ -201,7 +203,6 @@ function Post() {
                     </div>
                 ))
             }
-        </div>
     </div>
   )
 }

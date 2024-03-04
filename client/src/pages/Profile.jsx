@@ -203,7 +203,7 @@ const content = data?.pages.map(posts =>
               </Modal>
               <div className="mb-10">
                 {
-                  posts && (
+                  content && (
                     <div className='w-[80%] overflow-hidden mx-auto mt-5 grid grid-cols-2 gap-2 md:grid-cols-3'>
                       {content}
                     </div>
