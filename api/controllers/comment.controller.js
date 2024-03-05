@@ -81,3 +81,20 @@ export const deleteComment = async (req, res, next) => {
         next(err)
     }
 }
+
+export const editComment = async (req, res, next) => {
+    const { commentId, userId } = req.params
+    const { comment } = req.body
+
+    if(userId !== req.user.id){
+        next(errorHandler(404, 'Unauthorized to edit comment'))
+    }
+
+    try{
+        const editComment = await Comment.findByIdAndUpdate(commentId, {$set: {comment: comment}})
+
+        res.status(200).json(editComment)
+    }catch(err){
+        next(err)
+    }
+}

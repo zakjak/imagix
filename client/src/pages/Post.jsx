@@ -175,7 +175,9 @@ function Post() {
                                                         comments={comments}
                                                         likeComment={likeComment} setShowLikeToast={setShowLikeToast} 
                                                         currentUser={currentUser} showLikeToast={showLikeToast} 
-                                                        comment={comment}  />
+                                                        comment={comment} 
+                                                        setComment={setComment} 
+                                                    />
                                                 ))
                                             }
                                         </>

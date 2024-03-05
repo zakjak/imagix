@@ -2,12 +2,14 @@ import { FaHeart } from "react-icons/fa";
 import { numberManipulate } from "./Common";
 import { HiOutlineDotsVertical } from "react-icons/hi";
 import { useEffect, useState } from "react";
-import { Avatar, Button, Dropdown, Modal } from "flowbite-react";
+import { Avatar, Button, Dropdown, Modal, TextInput } from "flowbite-react";
 import moment from 'moment'
 
-function Comment({ setComments, comments, comment,currentUser, showLikeToast, setShowLikeToast, likeComment }) {
+function Comment({ setComments, comments, comment, currentUser, showLikeToast, setShowLikeToast, likeComment }) {
     const [user, setUser] = useState([])
     const [openDeleteModal, setOpenDeleteModal] = useState(false)
+    const [openEditModal, setOpenEditModal] = useState(false)
+    const [editComment, setEditComment] = useState(comment?.comment)
 
     useEffect(() => {
         const fetchUser = async () => {
@@ -21,7 +23,7 @@ function Comment({ setComments, comments, comment,currentUser, showLikeToast, se
         fetchUser()
     }, [comment])
 
-    const handleDelete = async (commentId) => {
+    const handleDeleteComment = async (commentId) => {
         const res = await fetch(`/api/comment/${commentId}/${user[0]?._id}`, {
             method: 'DELETE',
         })
@@ -30,6 +32,27 @@ function Comment({ setComments, comments, comment,currentUser, showLikeToast, se
         if(res.ok){
             const filter = setComments(comments?.filter(comment => comment?._id !== data?._id))
             setOpenDeleteModal(false)
+        }
+    }
+
+    const handleEditComment = async (e) => {
+        e.preventDefault()
+        const res = await fetch(`/api/comment/${comment?._id}/${user[0]?._id}`, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({comment: editComment})
+        })
+
+        const data = await res.json()
+
+        if(res.ok){
+            setComments(comments.map(comment => {
+                if(comment._id === data._id){
+                    return {comment: data.comment}
+                }
+            }))
+            
+            setOpenEditModal(false)
         }
     }
  
@@ -72,7 +95,7 @@ function Comment({ setComments, comments, comment,currentUser, showLikeToast, se
                 {
                     currentUser._id === comment?.owner && (
                         <Dropdown label='' dismissOnClick={false} renderTrigger={() => <div className="bg-slate-600 p-2 cursor-pointer rounded-full hover:bg-slate-700"><HiOutlineDotsVertical /></div>}>
-                            <Dropdown.Item>
+                            <Dropdown.Item onClick={() => setOpenEditModal(true)}>
                                 Edit
                             </Dropdown.Item>
                             <Dropdown.Divider />
@@ -90,9 +113,21 @@ function Comment({ setComments, comments, comment,currentUser, showLikeToast, se
                         </div>
                     </Modal.Body>
                     <Modal.Footer>
-                        <Button onClick={() =>handleDelete(comment?._id)}>I accept</Button>
+                        <Button onClick={() =>handleDeleteComment(comment?._id)}>I accept</Button>
                         <Button onClick={() => setOpenDeleteModal(false)}>Decline</Button>
                     </Modal.Footer>
+                </Modal>
+                <Modal show={openEditModal} onClose={() => setOpenEditModal(false)}>
+                    <Modal.Body className="bg-gray-800 p-10 flex flex-col">
+                    <div onClick={() => setOpenEditModal(false)} 
+                    className="p-4 w-12 h-12 right-2 top-2 absolute 
+                    flex items-center justify-center text-white
+                     rounded-full text-2xl bg-slate-500 cursor-pointer hover:bg-slate-700">X</div>
+                        <form className="flex mt-6 flex-col gap-4 items-center" onSubmit={handleEditComment}>
+                            <TextInput className="w-full" value={editComment} onChange={(e) => setEditComment(e.target.value)} />
+                            <Button className="w-[80%]" type="submit">Edit</Button>
+                        </form>
+                    </Modal.Body>
                 </Modal>
             </div>
 
