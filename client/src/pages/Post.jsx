@@ -1,7 +1,7 @@
 import { Avatar, Button } from 'flowbite-react'
 import React, { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import { FaHeart, FaPlay } from "react-icons/fa";
+import { FaPlay } from "react-icons/fa";
 import { useSelector } from 'react-redux';
 import { Toast } from 'flowbite-react'; 
 import { follow, numberManipulate } from '../components/Common';
@@ -121,6 +121,7 @@ function Post() {
             console.log(err)
         }
       }
+
       
   return (
     <div className='my-6 w-[80%] mx-auto bg-gray-300 dark:bg-gray-900 rounded-xl'>
@@ -168,7 +169,13 @@ function Post() {
                                             <h1>Comments: {numberManipulate(comments.length)}</h1>
                                             {
                                                 comments.map(comment => (
-                                                    <Comment key={comment._id} likeComment={likeComment} setShowLikeToast={setShowLikeToast} currentUser={currentUser} showLikeToast={showLikeToast} comment={comment}  />
+                                                    <Comment 
+                                                        key={comment._id} 
+                                                        setComments={setComments}
+                                                        comments={comments}
+                                                        likeComment={likeComment} setShowLikeToast={setShowLikeToast} 
+                                                        currentUser={currentUser} showLikeToast={showLikeToast} 
+                                                        comment={comment}  />
                                                 ))
                                             }
                                         </>

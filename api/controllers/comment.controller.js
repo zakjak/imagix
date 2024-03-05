@@ -64,3 +64,20 @@ export const likeComment = async(req, res, next) => {
         next(err)
     }
 }
+
+export const deleteComment = async (req, res, next) => {
+    const { userId, commentId } = req.params
+
+
+    if(userId !== req.user.id){
+        return next(errorHandler(403, 'Unauthorized to delete'))
+    }
+
+    try{
+        const deletedComment = await Comment.findByIdAndDelete(commentId )
+
+        res.status(200).json(deletedComment)
+    }catch(err){
+        next(err)
+    }
+}

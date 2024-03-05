@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { Avatar, Button, Dropdown, Modal } from "flowbite-react";
 import moment from 'moment'
 
-function Comment({ comment, currentUser, showLikeToast, setShowLikeToast, likeComment }) {
+function Comment({ setComments, comments, comment,currentUser, showLikeToast, setShowLikeToast, likeComment }) {
     const [user, setUser] = useState([])
     const [openDeleteModal, setOpenDeleteModal] = useState(false)
 
@@ -21,10 +21,17 @@ function Comment({ comment, currentUser, showLikeToast, setShowLikeToast, likeCo
         fetchUser()
     }, [comment])
 
-    const handleDelete = () => {
+    const handleDelete = async (commentId) => {
+        const res = await fetch(`/api/comment/${commentId}/${user[0]?._id}`, {
+            method: 'DELETE',
+        })
+        const data = await res.json()
 
+        if(res.ok){
+            const filter = setComments(comments?.filter(comment => comment?._id !== data?._id))
+            setOpenDeleteModal(false)
+        }
     }
-
  
   return (
     <div key={comment._id} className="mt-2">
@@ -60,18 +67,22 @@ function Comment({ comment, currentUser, showLikeToast, setShowLikeToast, likeCo
                     <div className="text-sm cursor-pointer" title='reply'>Reply</div>
                 </div>
                 </div>
-                
             </div>
             <div className="">
-                <Dropdown label='' dismissOnClick={false} renderTrigger={() => <div className="bg-slate-600 p-2 cursor-pointer rounded-full hover:bg-slate-700"><HiOutlineDotsVertical /></div>}>
-                    <Dropdown.Item>
-                        Edit
-                    </Dropdown.Item>
-                    <Dropdown.Divider />
-                    <Dropdown.Item  onClick={() => setOpenDeleteModal(true)}>
-                        Delete
-                    </Dropdown.Item>
-                </Dropdown>
+                {
+                    currentUser._id === comment?.owner && (
+                        <Dropdown label='' dismissOnClick={false} renderTrigger={() => <div className="bg-slate-600 p-2 cursor-pointer rounded-full hover:bg-slate-700"><HiOutlineDotsVertical /></div>}>
+                            <Dropdown.Item>
+                                Edit
+                            </Dropdown.Item>
+                            <Dropdown.Divider />
+                            <Dropdown.Item  onClick={() => setOpenDeleteModal(true)}>
+                                Delete
+                            </Dropdown.Item>
+                        </Dropdown>
+
+                    )
+                }
                 <Modal show={openDeleteModal} onClose={() => setOpenDeleteModal(false)}>
                     <Modal.Body>
                         <div className="">
@@ -79,7 +90,7 @@ function Comment({ comment, currentUser, showLikeToast, setShowLikeToast, likeCo
                         </div>
                     </Modal.Body>
                     <Modal.Footer>
-                        <Button onClick={handleDelete}>I accept</Button>
+                        <Button onClick={() =>handleDelete(comment?._id)}>I accept</Button>
                         <Button onClick={() => setOpenDeleteModal(false)}>Decline</Button>
                     </Modal.Footer>
                 </Modal>
