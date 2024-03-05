@@ -2,6 +2,7 @@ import React, { useEffect} from 'react'
 import { useInfiniteQuery } from '@tanstack/react-query'
 import { useInView } from 'react-intersection-observer'
 import Card from '../components/Card'
+import { Spinner } from 'flowbite-react'
 
 
 function Home() {
@@ -45,7 +46,9 @@ useEffect(() => {
 }, [inView, hasNextPage, fetchNextPage])
 
 if(status === 'pending'){
-  return <p>Loading...</p>
+  return <div className="w-full h-screen flex justify-center mt-4">
+    <Spinner size="xl" />
+  </div>
 }
 
 if(status === 'error'){
