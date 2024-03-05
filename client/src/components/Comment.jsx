@@ -2,11 +2,12 @@ import { FaHeart } from "react-icons/fa";
 import { numberManipulate } from "./Common";
 import { HiOutlineDotsVertical } from "react-icons/hi";
 import { useEffect, useState } from "react";
-import { Avatar } from "flowbite-react";
+import { Avatar, Button, Dropdown, Modal } from "flowbite-react";
 import moment from 'moment'
 
 function Comment({ comment, currentUser, showLikeToast, setShowLikeToast, likeComment }) {
-    const [user, setUser] = useState({})
+    const [user, setUser] = useState([])
+    const [openDeleteModal, setOpenDeleteModal] = useState(false)
 
     useEffect(() => {
         const fetchUser = async () => {
@@ -20,9 +21,11 @@ function Comment({ comment, currentUser, showLikeToast, setShowLikeToast, likeCo
         fetchUser()
     }, [comment])
 
-    console.log()
+    const handleDelete = () => {
 
+    }
 
+ 
   return (
     <div key={comment._id} className="mt-2">
         <div className="flex justify-between items-center">
@@ -59,9 +62,29 @@ function Comment({ comment, currentUser, showLikeToast, setShowLikeToast, likeCo
                 </div>
                 
             </div>
-            <div className="cursor-pointer p-2 rounded-full bg-gray-700 hover:bg-gray-800">
-                <HiOutlineDotsVertical />
+            <div className="">
+                <Dropdown label='' dismissOnClick={false} renderTrigger={() => <div className="bg-slate-600 p-2 cursor-pointer rounded-full hover:bg-slate-700"><HiOutlineDotsVertical /></div>}>
+                    <Dropdown.Item>
+                        Edit
+                    </Dropdown.Item>
+                    <Dropdown.Divider />
+                    <Dropdown.Item  onClick={() => setOpenDeleteModal(true)}>
+                        Delete
+                    </Dropdown.Item>
+                </Dropdown>
+                <Modal show={openDeleteModal} onClose={() => setOpenDeleteModal(false)}>
+                    <Modal.Body>
+                        <div className="">
+                            <p className="font-bold text-lg">Are you sure you want to delete your comment?</p>
+                        </div>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button onClick={handleDelete}>I accept</Button>
+                        <Button onClick={() => setOpenDeleteModal(false)}>Decline</Button>
+                    </Modal.Footer>
+                </Modal>
             </div>
+
         </div>
             {
                 
