@@ -122,6 +122,12 @@ function Post() {
         }
       }
 
+      const profilePage = (postOwner) => {
+        window.history.pushState(`/profile/${postOwner}`)
+        window.location.reload()
+      }
+
+
       
   return (
     <div className='my-6 w-[80%] mx-auto bg-gray-300 dark:bg-gray-900 rounded-xl'>
@@ -129,7 +135,7 @@ function Post() {
                 posts?.map(post => (
                     <div key={post?._id} className="w-[95%] mx-auto rounded-xl">
                         <div className="pt-4 flex justify-between">
-                        <Link to={`/profile/${post.owner}`} className="flex text-sm items-center gap-2">
+                        <Link onClick={() =>profilePage(post.owner)} to={`/profile/${post.owner}`} className="flex text-sm items-center gap-2">
                             <Avatar className='float-start' rounded img={user[0]?.picture} />
                             <div className="flex flex-col">
                                 <p>{user[0]?.username}</p>
@@ -157,7 +163,7 @@ function Post() {
                         <div className="mt-2">
                             <p className='text-base md:px-2 w-[90%]'>{post?.desc}</p>
                         </div>
-                        <div className="w-full mt-4 h-[30rem]">
+                        <div className="w-full mt-4 h-[40rem]">
                             <img className='w-full h-full object-cover' src={post.image} alt="" />
                         </div>
                         <div className="mt-2">

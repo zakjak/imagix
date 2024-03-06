@@ -8,6 +8,7 @@ import { persistor, store } from './redux/store.js'
 import ThemeProvider from './components/ThemeProvider.jsx'
 import { PersistGate } from 'redux-persist/integration/react'
 import {
+  QueriesObserver,
   QueryClient,
   QueryClientProvider,
 } from '@tanstack/react-query'

@@ -33,8 +33,6 @@ function Profile() {
     fileInput.current.click();
   }
   
-
-
   useEffect(() => {
     getUser()
   }, [userId.id])
@@ -87,7 +85,7 @@ const content = data?.pages.map(posts =>
     if(inView && hasNextPage){
       fetchNextPage()
     }
-  }, [inView, hasNextPage, fetchNextPage])
+  }, [inView, hasNextPage, fetchNextPage, userId.id])
 
   const handleChange = (e) => {
     const file = e.target.files[0]
