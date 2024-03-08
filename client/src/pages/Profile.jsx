@@ -52,40 +52,52 @@ function Profile() {
   }
 
 
-  const getPost = async ({ pageParam }) => {
-    if(pageParam){
-      const res = await fetch(`/api/post/getPost?ownerId=${userId.id}&limits=${pageParam * 9}`)
-      return await res.json()
-    }
+  const getPosts = async () => {
+      const res = await fetch(`/api/post/getPost?ownerId=${userId.id}`)
+      const data = await res.json()
+      
+      if(res.ok){
+        setPosts(data)
+      }
 }
 
-const { 
-  data, status, error, fetchNextPage, hasNextPage
-} = useInfiniteQuery({
-  queryKey: ['posts'],
-  queryFn: getPost,
-  initialPageParam: 1,
-  getNextPageParam: (lastPage, allPages) => {
-    const nextPage = lastPage?.posts.length ? allPages[0]?.posts.length + 1 : undefined
-    return nextPage
-  }
-})
+useEffect(() => {
+  getPosts()
+}, [userId.id])
 
-const content = data?.pages.map(posts => 
-  posts?.posts?.map((post, i) => {
-    if(posts?.posts.length === i + 1){
-      return <Card  post={post} key={post._id} innerRef={refView}  />
-    }else{
-      return <Card key={post._id} post={post} />
-    }
-})
-)
+console.log(posts)
 
-  useEffect(() => {
-    if(inView && hasNextPage){
-      fetchNextPage()
-    }
-  }, [inView, hasNextPage, fetchNextPage, userId.id])
+// const { 
+//   data, status, error, fetchNextPage, hasNextPage
+// } = useInfiniteQuery({
+//   queryKey: ['posts'],
+//   queryFn: getPost,
+//   initialPageParam: 1,
+//   getNextPageParam: (lastPage, allPages) => {
+    // console.log(lastPage)
+    // console.log(allPages)
+    // return allPages[0]?.posts?.length + 1
+//     const nextPage = lastPage?.posts.length ? allPages[0]?.posts.length + 1 : undefined
+//     return nextPage
+//   }
+// })
+
+// const content = data?.pages.map(posts => 
+//   posts?.posts?.map((post, i) => {
+//     if(posts?.posts.length === i + 1){
+//       return <Card  post={post} key={post._id} innerRef={refView}  />
+//     }else{
+//       return <Card key={post._id} post={post} />
+//     }
+// })
+// )
+
+
+  // useEffect(() => {
+  //   if(inView && hasNextPage){
+  //     fetchNextPage()
+  //   }
+  // }, [inView, hasNextPage, fetchNextPage, userId.id])
 
   const handleChange = (e) => {
     const file = e.target.files[0]
@@ -176,7 +188,7 @@ const content = data?.pages.map(posts =>
                   <span className="text-xs font-semibold">Followers</span>
                 </Link>
                 <div className="flex items-baseline gap-1">
-                  <span className="dark:text-gray-300 text-lg font-semibold">{data?.pages[0].postCount}</span>
+                  <span className="dark:text-gray-300 text-lg font-semibold">{posts?.postCount}</span>
                   <span className="text-xs font-semibold">Posts</span>
                 </div>
               </div>
@@ -197,16 +209,20 @@ const content = data?.pages.map(posts =>
                 }
               </div>
               <Modal show={openCreateModal} onClose={() => setCreateModal(false)}>
-                <CreateModal getPost={getPost} user={user[0]} openCreateModal={openCreateModal} setCreateModal={setCreateModal} />
+                <CreateModal getPost={getPosts} user={user[0]} openCreateModal={openCreateModal} setCreateModal={setCreateModal} />
               </Modal>
               <div className="mb-10">
-                {
-                  content && (
+             
                     <div className='w-[80%] overflow-hidden mx-auto mt-5 grid grid-cols-2 gap-2 md:grid-cols-3'>
-                      {content}
+                      {
+                        posts && (
+                          posts?.posts?.map(post => (
+                            <Card key={post?._id} post={post} />
+                          ))
+                        )
+                      }
                     </div>
-                  )
-                }
+               
               </div>
             </div>
           </div>

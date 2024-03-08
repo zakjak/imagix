@@ -11,18 +11,17 @@ function SearchIterms() {
     const searchTermUrl = urlParams.get('searchTerm')
 
     const { ref, inView } = useInView
-    
 
     const fetchPosts = async () => {
         if(searchTermUrl){
             const searchQuery = urlParams.toString()
+            console.log(searchQuery)
             const res = await fetch(`/api/post/getPost?${searchQuery}`)
             return await res.json()
         }
-        
     }
 
-   
+   console.log(location.searchTermUrl)
 
 const {
     data, hasNextPage, fetchNextPage
@@ -46,13 +45,11 @@ const content = data?.pages.map(posts =>
     })
 )
 
-console.log(data)
-
 useEffect(() => {
     if(inView && hasNextPage){
       fetchNextPage()
     }
-  }, [inView, hasNextPage, fetchNextPage, location.search])
+  }, [inView, hasNextPage, fetchNextPage])
  
   return (
     <div className='grid grid-cols-4 gap-4 w-[80%] mx-auto mt-6'>

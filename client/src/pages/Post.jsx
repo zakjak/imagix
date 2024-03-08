@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux';
 import { Toast } from 'flowbite-react'; 
 import { follow, numberManipulate } from '../components/Common';
 import Comment from '../components/Comment';
+import moment from 'moment';
 
 function Post() {
     const { currentUser } = useSelector(state => state.user)
@@ -137,14 +138,18 @@ function Post() {
                         <div className="pt-4 flex justify-between">
                         <Link onClick={() =>profilePage(post.owner)} to={`/profile/${post.owner}`} className="flex text-sm items-center gap-2">
                             <Avatar className='float-start' rounded img={user[0]?.picture} />
-                            <div className="flex flex-col">
-                                <p>{user[0]?.username}</p>
-                                <p className='dark:text-gray-300 text-xs'>
-                                    {`${user[0]?.followers?.length > 0 ?  
-                                        numberManipulate(user[0]?.followers?.length) === 1 ? 
-                                        `${numberManipulate(user[0]?.followers?.length)} follower`: 
-                                        `${numberManipulate(user[0]?.followers?.length)} followers` : ''}`}
-                                </p>
+                            <div className="flex gap-2">
+                                <div className="">
+                                    <p>{user[0]?.username}</p>
+                                    <p className='dark:text-gray-300 text-xs'>
+                                        {`${user[0]?.followers?.length > 0 ?  
+                                            numberManipulate(user[0]?.followers?.length) === 1 ? 
+                                            `${numberManipulate(user[0]?.followers?.length)} follower`: 
+                                            `${numberManipulate(user[0]?.followers?.length)} followers` : ''}`}
+                                    </p>   
+                                </div>
+                                <div className="w-[.6px] h-[1rem] bg-slate-500" />
+                                <p className='text-slate-500'>{moment(post?.createdAt).fromNow()}</p>
                             </div>
                         </Link>
                         <div className='flex justify-between'>
@@ -179,8 +184,10 @@ function Post() {
                                                         key={comment._id} 
                                                         setComments={setComments}
                                                         comments={comments}
-                                                        likeComment={likeComment} setShowLikeToast={setShowLikeToast} 
-                                                        currentUser={currentUser} showLikeToast={showLikeToast} 
+                                                        likeComment={likeComment} 
+                                                        setShowLikeToast={setShowLikeToast} 
+                                                        currentUser={currentUser} 
+                                                        showLikeToast={showLikeToast} 
                                                         comment={comment} 
                                                         setComment={setComment} 
                                                     />

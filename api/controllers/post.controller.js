@@ -23,7 +23,7 @@ export const getPost = async(req, res, next) => {
     const { ownerId, postId, order, limits, startIndex, searchTerm } = req.query
     try{
         const direction = parseInt(order) === 'asc' ? 1 : -1
-        const limit = parseInt(limits) || 9
+        const limit = parseInt(limits) || 15
         const start = parseInt(startIndex) || 0
         const posts = await Post.find({
             ...(postId && {_id: postId}),
