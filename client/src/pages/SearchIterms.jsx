@@ -4,56 +4,67 @@ import Card from '../components/Card'
 import { useInfiniteQuery } from '@tanstack/react-query'
 import { useInView } from 'react-intersection-observer'
 import { Masonry } from '@mui/lab'
+import UserCard from '../components/UserCard'
 
 function SearchIterms() {
+    const [posts, setPosts] = useState([])
+    const [users, setUsers] = useState([])
     const location = useLocation()
     const urlParams = new URLSearchParams(location.search)
     const searchTermUrl = urlParams.get('searchTerm')
 
-    const { ref, inView } = useInView
+    // const { ref, inView } = useInView
+
+
+
+    const fetchUsers = async () => {
+        if(searchTermUrl){
+            const searchQuery = urlParams.toString()
+            const users = await fetch(`/api/user/getUser?${searchQuery}`)
+            
+            const data = await users.json()
+
+            setUsers(data)
+        }
+    }
 
     const fetchPosts = async () => {
         if(searchTermUrl){
             const searchQuery = urlParams.toString()
-            console.log(searchQuery)
-            const res = await fetch(`/api/post/getPost?${searchQuery}`)
-            return await res.json()
+            const users = await fetch(`/api/user/getUser?${searchQuery}`)
+            
+            const data = await users.json()
+
+            setPosts(data?.posts)
         }
     }
 
-   console.log(location.searchTermUrl)
+   useEffect(() => {
+    fetchPosts()
+    fetchUsers()
+   }, [searchTermUrl])
 
-const {
-    data, hasNextPage, fetchNextPage
-} = useInfiniteQuery({
-    queryKey: ['search'],
-    queryFn: fetchPosts,
-    initialPageParam: 1,
-    getNextPageParam: (lastPage, allPage) => {
-        const nextPage = allPage.length ? lastPage.length + 1 : undefined
-        return nextPage
-    }
-})
-
-const content = data?.pages.map(posts => 
-    posts.posts.map((post, i) => {
-        if(posts.posts.length === i + 1){
-            return <Card post={post} key={post._id} innerRef={ref} />
-        }else{
-            return <Card post={post} key={post._id}  />
-        }
-    })
-)
-
-useEffect(() => {
-    if(inView && hasNextPage){
-      fetchNextPage()
-    }
-  }, [inView, hasNextPage, fetchNextPage])
- 
   return (
-    <div className='grid grid-cols-4 gap-4 w-[80%] mx-auto mt-6'>
-        {content}
+    <div className='w-full'>
+        {
+            posts?.length > 0 && (
+                <div className='grid grid-cols-4 gap-4 w-[80%] mx-auto mt-6'>
+                    {posts?.map(post => (
+                        <Card key={post._id} post={post} />
+                    ))}
+                </div>
+            )
+        }
+        {
+            users && (
+                <div className="w-[80%] mx-auto mt-8 p-4 bg-slate-100 dark:bg-gray-800  rounded-2xl shadow-lg  dark:shadow-md">
+                    <h1 className='text-2xl'>People</h1>
+                    {users?.map(user => (
+                        <UserCard key={user._id} user={user} setUser={setUsers} />
+                    ))}
+                </div>
+            )
+        }
     </div>
   )
 }

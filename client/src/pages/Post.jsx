@@ -41,9 +41,10 @@ function Post() {
         }
         try{
           const res = await fetch(`/api/user/getUser?userId=${posts[0]?.owner}`)
+          const data = await res.json()
     
           if(res.ok){
-            const data = await res.json()
+            
             setUser(data)
           }
           

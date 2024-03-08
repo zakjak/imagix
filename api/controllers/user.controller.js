@@ -27,18 +27,15 @@ export const updateUser = async (req, res, next) => {
 export const getUser = async(req, res, next) => {
     const { userId, searchTerm, order, limits, followersId } = req.query
 
-
-    if(!userId || userId === '' 
-    && !searchTerm || searchTerm ==='' && !followersId || followersId === ''   ){
+    if(userId === '' && !userId || 
+    searchTerm === '' && !searchTerm || followersId === '' && !followersId){
         return next(errorHandler(404, 'No user found!'))
     }
-
-    
 
     try{
         const sorDirection = parseInt(order) === 'asc' ? 1 : 1
         const limit = parseInt(limits) || 9
-        const user = await User.find({
+        const users = await User.find({
             ...(userId && {_id: userId}),
             ...(followersId && {$all: followersId}),
             ...(searchTerm && {
@@ -47,9 +44,17 @@ export const getUser = async(req, res, next) => {
                 ]
             })
         }).sort({ createdAt: sorDirection }).limit(limit)
-        const { password, ...rest } = user[0]._doc
+        if(users.length > 0){
+            const data = users.map(user => {
+                const {password, ...rest} = user._doc
+                return rest
+            })
+            res.status(200).json(data)
+        }else{
+            const {password, ...rest} = users._doc
+            res.status(200).json([rest])
+        }
     
-        res.status(200).json([rest])
     }catch(err){
         console.log(err)
     }

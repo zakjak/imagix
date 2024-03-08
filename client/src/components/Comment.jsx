@@ -92,7 +92,7 @@ function Comment({ setComments, comments, comment, currentUser, showLikeToast, s
                                 `${numberManipulate(comment?.numberOfLikes)} likes` : ''}`}
                         </span>
                     </div>
-                    <div className="text-sm cursor-pointer" title='reply'>Reply</div>
+                    {/* <div className="text-sm cursor-pointer" title='reply'>Reply</div> */}
                 </div>
                 </div>
             </div>

@@ -59,11 +59,6 @@ function Navbar() {
         dispatch(signOut())
     }
 
-    const homePage = () => {
-        window.history.pushState(`/`)
-        window.location.reload()
-      }
-
   return (
     <nav className="z-50 h-16 w-full overflow-hidden bg-gray-200 dark:bg-[#0B0C0E] shadow-md dark:shadow-gray-900 flex items-center">
          <div className="w-[90%] mx-auto flex justify-between items-center">
