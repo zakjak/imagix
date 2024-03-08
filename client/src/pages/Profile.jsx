@@ -65,7 +65,6 @@ useEffect(() => {
   getPosts()
 }, [userId.id])
 
-console.log(posts)
 
 // const { 
 //   data, status, error, fetchNextPage, hasNextPage
@@ -102,9 +101,9 @@ console.log(posts)
   const handleChange = (e) => {
     const file = e.target.files[0]
     const storage = getStorage(app)
-    const { currentUser } = useSelector(state => state.user)
 
     const fileName = file.name + new Date().getTime()
+    console.log(file)
 
     const metadata = {
       contentType: 'image/jpeg'

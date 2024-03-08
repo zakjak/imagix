@@ -91,7 +91,9 @@ export const editComment = async (req, res, next) => {
     }
 
     try{
-        const editComment = await Comment.findByIdAndUpdate(commentId, {$set: {comment: comment}})
+        const editComment = await Comment.findByIdAndUpdate({ _id: commentId })
+        editComment.comment = comment
+        await editComment.save()
 
         res.status(200).json(editComment)
     }catch(err){

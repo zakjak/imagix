@@ -38,20 +38,25 @@ function Comment({ setComments, comments, comment, currentUser, showLikeToast, s
     const handleEditComment = async (e) => {
         e.preventDefault()
         const res = await fetch(`/api/comment/${comment?._id}/${user[0]?._id}`, {
-            method: 'POST',
+            method: 'PUT',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({comment: editComment})
         })
 
-        const data = await res.json()
+        
 
-        if(res.ok){
-            setComments(comments.map(comment => {
-                if(comment._id === data._id){
-                    return {comment: data.comment}
-                }
-            }))
-            
+        if(res.ok){ 
+            const data = await res.json()
+            const index = comments.findIndex(comment => comment?._id === data?._id)
+            if(index !== -1){
+                setComments(prev => {
+                    const newArray = [...prev]
+                    newArray[index] = data
+                    return newArray
+                })
+                
+                
+            }
             setOpenEditModal(false)
         }
     }

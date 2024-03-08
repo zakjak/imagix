@@ -173,13 +173,13 @@ function Post() {
                         </div>
                         <div className="mt-2">
                                     {
-                                        comments.length === 0 ?(
+                                        comments?.length === 0 ?(
                                             <h1 className='text-lg'><p className='font-semibold'>No comments yet</p></h1>
                                         ): (
                                             <>
-                                            <h1>Comments: {numberManipulate(comments.length)}</h1>
+                                            <h1>Comments: {numberManipulate(comments?.length)}</h1>
                                             {
-                                                comments.map(comment => (
+                                                comments?.map(comment => (
                                                     <Comment 
                                                         key={comment._id} 
                                                         setComments={setComments}
