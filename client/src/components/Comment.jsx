@@ -24,7 +24,7 @@ function Comment({ setComments, comments, comment, currentUser, showLikeToast, s
     }, [comment])
 
     const handleDeleteComment = async (commentId) => {
-        const res = await fetch(`/api/comment/${commentId}/${user[0]?._id}`, {
+        const res = await fetch(`/api/comment/${commentId}/${user?._id}`, {
             method: 'DELETE',
         })
         const data = await res.json()
@@ -37,7 +37,7 @@ function Comment({ setComments, comments, comment, currentUser, showLikeToast, s
 
     const handleEditComment = async (e) => {
         e.preventDefault()
-        const res = await fetch(`/api/comment/${comment?._id}/${user[0]?._id}`, {
+        const res = await fetch(`/api/comment/${comment?._id}/${user?._id}`, {
             method: 'PUT',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({comment: editComment})
@@ -65,11 +65,11 @@ function Comment({ setComments, comments, comment, currentUser, showLikeToast, s
         <div className="flex justify-between items-center">
             <div className="flex items-start gap-2">
                 <div className="flex gap-2">
-                    <Avatar img={user[0]?.picture} rounded className="flex justify-end" />
+                    <Avatar img={user?.picture} rounded className="flex justify-end" />
                 </div>
                 <div className="">
                     <div className="flex items-center gap-2">
-                        <p className="font-semibold text-sm">{user[0]?.username}</p>
+                        <p className="font-semibold text-sm">{user?.username}</p>
                         <div className="w-[.6px] h-[1rem] bg-white" />
                         <p className="text-sm text-gray-500 dark:text-gray-400">{moment(comment?.createdAt).fromNow()}</p>
                     </div>

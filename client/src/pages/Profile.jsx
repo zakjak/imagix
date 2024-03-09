@@ -139,10 +139,10 @@ useEffect(() => {
 
   return (
     <div className="w-full min-h-full flex-wrap pb-4">
-      <div style={{ backgroundImage: `url(${user[0]?.banner})` }} className={' relative h-[20rem] bg-no-repeat bg-center aspect-auto bg-cover'}>
+      <div style={{ backgroundImage: `url(${user?.banner})` }} className={' relative h-[20rem] bg-no-repeat bg-center aspect-auto bg-cover'}>
         <input onChange={handleChange} type="file" className="hidden" ref={fileInput} />
         {
-          user[0]?._id === currentUser._id && (
+          user?._id === currentUser._id && (
             <div onClick={handleFileUpload} className="p-3 rounded-full absolute text-gray-400 hover:text-white  bg-black right-2 top-2 cursor-pointer hover:bg-gray-800">
               <MdEdit />
             </div>
@@ -152,15 +152,15 @@ useEffect(() => {
           <div className="w-[94%] mx-auto">
             <div className="flex relative justify-between items-end">
               <div className=" md:h-[11rem] shrink-0 border-4 border-gray-200 min  dark:border-[#0B0C0E] overflow-hidden rounded-full lg:h-[13rem] w-[9rem] h-[9rem] lg:w-[13rem] md:w-[11rem]">
-                  <img className="w-full h-full object-cover" src={user[0]?.picture} />
+                  <img className="w-full h-full object-cover" src={user?.picture} />
               </div>
               <div className="flex overflow-clip gap-4 right mb-2 items-center">
                 {
-                  user[0]?._id !== currentUser._id ? (
+                  user?._id !== currentUser._id ? (
                     <>
-                      <Button color="dark" className="p-0" onClick={() => follow(user[0]?._id, currentUser?._id, currentUser, setUser, user)}>
+                      <Button color="dark" className="p-0" onClick={() => follow(user?._id, currentUser?._id, currentUser, setUser, user)}>
                       {
-                        user[0]?.followers?.includes(currentUser?._id) ? 
+                        user?.followers?.includes(currentUser?._id) ? 
                         'Following' : 'Follow'
                       }
                       </Button>
@@ -172,19 +172,19 @@ useEffect(() => {
                   )
                 }
                 <Modal show={openModal} onClose={() => setOpenModal(false)}>
-                  <EditModal user={user[0]} getUser={getUser} openModal={openModal} setOpenModal={setOpenModal} />
+                  <EditModal user={user} getUser={getUser} openModal={openModal} setOpenModal={setOpenModal} />
                 </Modal>
               </div>
             </div>
             <div className="flex justify-between">
               <h2 className="font-semibold text-md ml-4 lg:ml-12 md:text-lg whitespace-nowrap">{currentUser?.username}</h2>
               <div className="flex gap-4 overflow-clip">
-                <Link to={`/profile/${user[0]?._id}/following`} className='flex items-baseline gap-1'>
-                  <span className="text-lg dark:text-gray-300 font-semibold">{user[0]?.following?.length}</span>
+                <Link to={`/profile/${user?._id}/following`} className='flex items-baseline gap-1'>
+                  <span className="text-lg dark:text-gray-300 font-semibold">{user?.following?.length}</span>
                   <span className="text-xs font-semibold">Following</span>
                 </Link>
-                <Link onClick={() => handleFollowers(user[0]?.following)} to={`/profile/${user[0]?._id}/followers`} className="flex items-baseline gap-1">
-                  <span className="dark:text-gray-300 text-lg font-semibold">{user[0]?.followers?.length}</span>
+                <Link onClick={() => handleFollowers(user?.following)} to={`/profile/${user?._id}/followers`} className="flex items-baseline gap-1">
+                  <span className="dark:text-gray-300 text-lg font-semibold">{user?.followers?.length}</span>
                   <span className="text-xs font-semibold">Followers</span>
                 </Link>
                 <div className="flex items-baseline gap-1">
@@ -197,9 +197,9 @@ useEffect(() => {
           <div className="absolute w-full mb-2 mt-4">
             <div className="w-[87%] mx-auto">
               <div className=" w-[60%] flex flex-col items-start">
-                <p className="">{user[0]?.bio}</p>
+                <p className="">{user?.bio}</p>
                 {
-                  user[0]?._id === currentUser._id &&(
+                  user?._id === currentUser._id &&(
                     <button onClick={() => setCreateModal(true)} className="mt-4 p-2 rounded-full bg-black 
                     dark:bg-gray-100 dark:text-black text-white 
                     text-2xl font-extrabold flex items-center gap-1 cursor-pointer">
@@ -209,11 +209,11 @@ useEffect(() => {
                 }
               </div>
               <Modal show={openCreateModal} onClose={() => setCreateModal(false)}>
-                <CreateModal getPost={getPosts} user={user[0]} openCreateModal={openCreateModal} setCreateModal={setCreateModal} />
+                <CreateModal getPost={getPosts} user={user} openCreateModal={openCreateModal} setCreateModal={setCreateModal} />
               </Modal>
               <div className="mb-10">
              
-                    <div className='w-[80%] overflow-hidden mx-auto mt-5 grid grid-cols-2 gap-2 md:grid-cols-3'>
+                    <div className='w-[80%] overflow-hidden mx-auto mt-5 grid grid-cols-2 md:gap-3 gap-2 md:grid-cols-3'>
                       {
                         posts && (
                           posts?.posts?.map(post => (

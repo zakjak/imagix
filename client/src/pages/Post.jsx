@@ -53,6 +53,8 @@ function Post() {
         }
       }
 
+      console.log(user)
+
     
       const getComment = async () =>{
         try{
@@ -138,15 +140,15 @@ function Post() {
                     <div key={post?._id} className="w-[95%] mx-auto rounded-xl">
                         <div className="pt-4 flex justify-between">
                         <Link onClick={() =>profilePage(post.owner)} to={`/profile/${post.owner}`} className="flex text-sm items-center gap-2">
-                            <Avatar className='float-start' rounded img={user[0]?.picture} />
+                            <Avatar className='float-start' rounded img={user?.picture} />
                             <div className="flex gap-2">
                                 <div className="">
-                                    <p>{user[0]?.username}</p>
+                                    <p>{user?.username}</p>
                                     <p className='dark:text-gray-300 text-xs'>
-                                        {`${user[0]?.followers?.length > 0 ?  
-                                            numberManipulate(user[0]?.followers?.length) === 1 ? 
-                                            `${numberManipulate(user[0]?.followers?.length)} follower`: 
-                                            `${numberManipulate(user[0]?.followers?.length)} followers` : ''}`}
+                                        {`${user?.followers?.length > 0 ?  
+                                            numberManipulate(user?.followers?.length) === 1 ? 
+                                            `${numberManipulate(user?.followers?.length)} follower`: 
+                                            `${numberManipulate(user?.followers?.length)} followers` : ''}`}
                                     </p>   
                                 </div>
                                 <div className="w-[.6px] h-[1rem] bg-slate-500" />
@@ -156,9 +158,9 @@ function Post() {
                         <div className='flex justify-between'>
                             {
                                 currentUser?._id !== user[0]?._id && (
-                                    <Button color='dark' onClick={() => follow(user[0]?._id, currentUser?._id, currentUser, setUser, user)}>
+                                    <Button color='dark' onClick={() => follow(user?._id, currentUser?._id, currentUser, setUser, user)}>
                                         {
-                                            user[0]?.followers?.includes(currentUser?._id) ? 
+                                            user?.followers?.includes(currentUser?._id) ? 
                                             'Following' : 'Follow'
                                         }
                                     </Button>
@@ -169,8 +171,8 @@ function Post() {
                         <div className="mt-2">
                             <p className='text-base md:px-2 w-[90%]'>{post?.desc}</p>
                         </div>
-                        <div className="w-full mt-4 h-[40rem]">
-                            <img className='w-full h-full object-cover' src={post.image} alt="" />
+                        <div className="w-full mt-4 h-[33rem] overflow-hidden">
+                            <img className='w-full h-[140%] object-cover' src={post.image} alt="" />
                         </div>
                         <div className="mt-2">
                                     {

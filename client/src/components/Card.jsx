@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { Avatar } from 'flowbite-react'
 import { useSelector } from 'react-redux'
@@ -9,6 +9,8 @@ import { numberManipulate } from './Common'
 function Card({ post, innerRef, setPosts, posts,...props }) {
   const [user, setUser] = useState({})
   const { currentUser } = useSelector(state => state.user)
+
+  const location = useLocation()
 
 
   const fetchUsers = async () => {
@@ -81,7 +83,9 @@ const handlePostLikes = async (postId) => {
             src={post.image} alt={`${post?.desc}`} />
           </div>
       </Link>
-      <div className="flex justify-between px-1 mt-2">
+      {
+        !location.pathname.includes('profile') && (
+<div className="flex justify-between px-1 mt-2">
         <Link to={`/profile/${user?._id}`} className="flex gap-1 items-center">
             <Avatar img={user?.picture} alt={`Profile of ${user?.username}`} size='sm' rounded/>
             <span className='text-xs dark:text-slate-300'>{user?.username}</span>
@@ -104,6 +108,8 @@ const handlePostLikes = async (postId) => {
                 </div>
             </div>
       </div>
+        )
+      }
     </motion.div>
     </>
   )

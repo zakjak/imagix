@@ -68,13 +68,13 @@ const CardSearch = ({ post, setPosts, posts }) => {
     <div>
         <Link to={`/post/${post?._id}`} className="">
             <div className="rounded-md overflow-hidden w-full h-[13rem]">
-                <img className='w-full h-full' src={post.image} alt="" />
+                <img className='w-full h-[120%] object-cover' src={post.image} alt="" />
             </div>
         </Link>
         <div className="flex pt-2 justify-between items-center">
-            <Link to={`/profile/${user[0]?._id}`} className="flex gap-1 items-center">
-                <Avatar img={user[0]?.picture} size='sm' rounded/>
-                <span className='text-xs dark:text-slate-300'>{user[0]?.username}</span>
+            <Link to={`/profile/${user?._id}`} className="flex gap-1 items-center">
+                <Avatar img={user?.picture} size='sm' rounded/>
+                <span className='text-xs dark:text-slate-300'>{user?.username}</span>
             </Link>
             <div className="">
                 <div className="flex items-center gap-1">
