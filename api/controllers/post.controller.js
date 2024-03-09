@@ -1,6 +1,8 @@
 import Post from "../models/post.model.js"
 import { errorHandler } from "../utils/errorHandler.js"
 
+// CREATE A POST
+
 export const createPost = async (req, res, next) => {
     const { desc, image, userId } = req.body
 
@@ -19,8 +21,11 @@ export const createPost = async (req, res, next) => {
     }
 }
 
+// GET POSTS
+
 export const getPost = async(req, res, next) => {
     const { ownerId, postId, order, limits, startIndex, searchTerm } = req.query
+    
     try{
         const direction = parseInt(order) === 'asc' ? 1 : -1
         const limit = parseInt(limits) || 15
@@ -39,6 +44,40 @@ export const getPost = async(req, res, next) => {
         const postCount = await Post.find({ owner: ownerId }).countDocuments()
 
         res.status(200).json({posts, postCount})
+    }catch(err){
+        next(err)
+    }
+}
+
+// Like POST
+
+export const likePost = async(req, res, next) => {
+    const { postId, userId } = req.params
+
+    if(req.user.id !== userId){
+        return next(errorHandler(403, 'Login to comment'))
+    }
+
+    if(!postIdId || !userId || postId === '' || userId === ''){
+        return next(errorHandler(403, "Fields can't be empty"))
+    }
+
+    try{
+        const post = await Post.findById({_id: postId})
+        const postIndex = post.likes.indexOf(userId)
+
+        if(postIndex === -1){
+            post.likes.push(userId)
+            post.numberOfLikes += 1
+        }else{
+            post.likes.splice(postIndex, 1)
+            post.numberOfLikes -= 1
+        }
+
+        await comment.save()
+
+        res.status(200).json(post)
+
     }catch(err){
         next(err)
     }

@@ -28,7 +28,6 @@ useEffect(() => {
   getPosts()
 }, [])
 
-console.log(posts)
 // const { 
 //   data, status, error, fetchNextPage, hasNextPage, isFetching
 // } = useInfiniteQuery({

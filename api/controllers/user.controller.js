@@ -28,7 +28,8 @@ export const getUser = async(req, res, next) => {
     const { userId, searchTerm, order, limits, followersId } = req.query
 
     if(userId === '' && !userId || 
-    searchTerm === '' && !searchTerm || followersId === '' && !followersId){
+    searchTerm === '' && !searchTerm || 
+    followersId === '' && !followersId){
         return next(errorHandler(404, 'No user found!'))
     }
 
@@ -44,7 +45,7 @@ export const getUser = async(req, res, next) => {
                 ]
             })
         }).sort({ createdAt: sorDirection }).limit(limit)
-        if(users.length > 0){
+        if(users.length > 1){
             const data = users.map(user => {
                 const {password, ...rest} = user._doc
                 return rest

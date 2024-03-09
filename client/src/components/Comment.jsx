@@ -43,7 +43,6 @@ function Comment({ setComments, comments, comment, currentUser, showLikeToast, s
             body: JSON.stringify({comment: editComment})
         })
 
-        
 
         if(res.ok){ 
             const data = await res.json()
