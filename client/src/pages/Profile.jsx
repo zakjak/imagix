@@ -40,9 +40,10 @@ function Profile() {
   const getUser = async () =>{
     try{
       const res = await fetch(`/api/user/getUser?userId=${userId.id}`)
-
+      
       if(res.ok){
         const data = await res.json()
+        console.log(data)
         setUser(data)
       }
       

@@ -55,10 +55,10 @@ export const likePost = async(req, res, next) => {
     const { postId, userId } = req.params
 
     if(req.user.id !== userId){
-        return next(errorHandler(403, 'Login to comment'))
+        return next(errorHandler(403, 'Login to like post'))
     }
 
-    if(!postIdId || !userId || postId === '' || userId === ''){
+    if(!postId || !userId || postId === '' || userId === ''){
         return next(errorHandler(403, "Fields can't be empty"))
     }
 
@@ -74,7 +74,7 @@ export const likePost = async(req, res, next) => {
             post.numberOfLikes -= 1
         }
 
-        await comment.save()
+        await post.save()
 
         res.status(200).json(post)
 

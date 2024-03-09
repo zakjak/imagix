@@ -47,12 +47,18 @@ function SearchIterms() {
    }, [searchTermUrl])
 
   return (
-    <div className='w-full'>
+    <div className='w-full p-5'>
+        <h1 className='text-center mt-6 text-md dark:text-slate-200 text-gray-500'>Search results: <span className='text-xl dark:text-white'>{searchTermUrl}</span></h1>
         {
             posts?.length > 0 && (
                 <div className='grid grid-cols-4 gap-4 w-[80%] mx-auto mt-6'>
                     {posts?.map(post => (
-                        <CardSearch key={post._id} post={post} />
+                        <CardSearch 
+                            key={post._id} 
+                            post={post} 
+                            posts={posts} 
+                            setPosts={setPosts} 
+                        />
                     ))}
                 </div>
             )

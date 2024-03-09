@@ -45,14 +45,15 @@ export const getUser = async(req, res, next) => {
                 ]
             })
         }).sort({ createdAt: sorDirection }).limit(limit)
+
         if(users.length > 1){
             const data = users.map(user => {
-                const {password, ...rest} = user._doc
+                const {password, ...rest} = user?._doc
                 return rest
             })
             res.status(200).json(data)
         }else{
-            const {password, ...rest} = users._doc
+            const {password, ...rest} = users[0]?._doc
             res.status(200).json([rest])
         }
     

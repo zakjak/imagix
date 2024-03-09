@@ -12,7 +12,14 @@ const PostSchema = new mongoose.Schema({
     owner: {
         type: String
     },
-    
+    likes: {
+        type: [String],
+        default: []
+    },
+    numberOfLikes: {
+        type: Number, 
+        default: 0
+    },
     // tags: {
     //     type: String,
     //     default: []
