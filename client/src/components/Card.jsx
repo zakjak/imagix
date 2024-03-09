@@ -113,7 +113,7 @@ const open = Boolean(openPopover)
         <div className="">
                 <div className="flex items-center gap-1">
                     <span 
-                        className={`cursor-pointer ${post.likes.includes(currentUser._id) ? 'text-red-900' : 'text-gray-500'}`} 
+                        className={`cursor-pointer ${post?.likes.includes(currentUser?._id) ? 'text-red-900' : 'text-gray-500'}`} 
                         onClick={() => handlePostLikes(post?._id)}><FaHeart /></span>
                     <span>
                     <span 

@@ -142,7 +142,7 @@ useEffect(() => {
       <div style={{ backgroundImage: `url(${user?.banner})` }} className={' relative h-[20rem] bg-no-repeat bg-center aspect-auto bg-cover'}>
         <input onChange={handleChange} type="file" className="hidden" ref={fileInput} />
         {
-          user?._id === currentUser._id && (
+          user?._id === currentUser?._id && (
             <div onClick={handleFileUpload} className="p-3 rounded-full absolute text-gray-400 hover:text-white  bg-black right-2 top-2 cursor-pointer hover:bg-gray-800">
               <MdEdit />
             </div>
@@ -156,7 +156,7 @@ useEffect(() => {
               </div>
               <div className="flex overflow-clip gap-4 right mb-2 items-center">
                 {
-                  user?._id !== currentUser._id ? (
+                  user?._id !== currentUser?._id ? (
                     <>
                       <Button color="dark" className="p-0" onClick={() => follow(user?._id, currentUser?._id, currentUser, setUser, user)}>
                       {
@@ -177,7 +177,7 @@ useEffect(() => {
               </div>
             </div>
             <div className="flex justify-between">
-              <h2 className="font-semibold text-md ml-4 lg:ml-12 md:text-lg whitespace-nowrap">{currentUser?.username}</h2>
+              <h2 className="font-semibold text-md ml-4 lg:ml-12 md:text-lg whitespace-nowrap">{user?.username}</h2>
               <div className="flex gap-4 overflow-clip">
                 <Link to={`/profile/${user?._id}/following`} className='flex items-baseline gap-1'>
                   <span className="text-lg dark:text-gray-300 font-semibold">{user?.following?.length}</span>
@@ -199,7 +199,7 @@ useEffect(() => {
               <div className=" w-[60%] flex flex-col items-start">
                 <p className="">{user?.bio}</p>
                 {
-                  user?._id === currentUser._id &&(
+                  user?._id === currentUser?._id &&(
                     <button onClick={() => setCreateModal(true)} className="mt-4 p-2 rounded-full bg-black 
                     dark:bg-gray-100 dark:text-black text-white 
                     text-2xl font-extrabold flex items-center gap-1 cursor-pointer">
