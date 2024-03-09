@@ -64,7 +64,7 @@ function SearchIterms() {
             )
         }
         {
-            users && (
+            users.length > 0 && (
                 <div className="w-[80%] mx-auto mt-8 p-4 bg-slate-100 dark:bg-gray-800  rounded-2xl shadow-lg  dark:shadow-md">
                     <h1 className='text-2xl'>People</h1>
                     {users?.map(user => (

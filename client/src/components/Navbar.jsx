@@ -6,13 +6,15 @@ import { toggleTheme } from '../redux/theme/themeSlice'
 import {loginStart, loginSuccess, loginFailure, signOut} from '../redux/user/userSlice'
 import { IoLogOutOutline } from "react-icons/io5";
 import { FaMoon, FaSun } from 'react-icons/fa'
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import Search from "./Search"
 
 function Navbar() {
     const dispatch = useDispatch()
     const { currentUser } = useSelector(state => state.user)
     const { theme } = useSelector(state => state.theme)
+
+    const navigate = useNavigate()
 
     const handleSignIn = () => {
         const auth = getAuth(app)
@@ -57,6 +59,7 @@ function Navbar() {
     }
     const handleSignOut = () => {
         dispatch(signOut())
+        navigate('/')
     }
 
   return (
