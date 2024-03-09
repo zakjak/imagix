@@ -5,12 +5,15 @@ import { Avatar } from 'flowbite-react'
 import { useSelector } from 'react-redux'
 import { FaHeart } from 'react-icons/fa'
 import { numberManipulate } from './Common'
+import { Popover } from '@mui/material'
 
 function Card({ post, innerRef, setPosts, posts,...props }) {
   const [user, setUser] = useState({})
   const { currentUser } = useSelector(state => state.user)
+  const [openPopover, setOpenPopover] = useState(null)
 
   const location = useLocation()
+
 
 
   const fetchUsers = async () => {
@@ -63,6 +66,16 @@ const handlePostLikes = async (postId) => {
   }
 }
 
+const handlePopoverOpen = (e) => {
+  setOpenPopover(e.currentTarget)
+}
+
+const handlePopoverClose = (e) => {
+  setOpenPopover(null)
+}
+
+const open = Boolean(openPopover)
+
   return (
     <>
     <motion.div 
@@ -85,11 +98,18 @@ const handlePostLikes = async (postId) => {
       </Link>
       {
         !location.pathname.includes('profile') && (
-<div className="flex justify-between px-1 mt-2">
-        <Link to={`/profile/${user?._id}`} className="flex gap-1 items-center">
-            <Avatar img={user?.picture} alt={`Profile of ${user?.username}`} size='sm' rounded/>
-            <span className='text-xs dark:text-slate-300'>{user?.username}</span>
-        </Link>
+      <div className="flex justify-between px-1 mt-2">
+          <Link 
+            onMouseEnter={handlePopoverOpen} 
+            onMouseLeave={handlePopoverClose} 
+            aria-haspopup='true'
+            aria-owns={open ? 'mouse-over-popover': undefined} 
+            to={`/profile/${user?._id}`} 
+            className="flex gap-1 items-center"
+          >
+              <Avatar img={user?.picture} alt={`Profile of ${user?.username}`} size='sm' rounded/>
+              <span className='text-xs dark:text-slate-300'>{user?.username}</span>
+          </Link>
         <div className="">
                 <div className="flex items-center gap-1">
                     <span 
