@@ -61,16 +61,17 @@ const CardSearch = ({ post, setPosts, posts }) => {
     useEffect(() => {
         getUser()
     }, [location.search])
+    console.log(user)
       
     
   return (
     <div>
         <Link to={`/post/${post?._id}`} className="">
-            <div className="rounded-md overflow-hidden">
-                <img className='w-full' src={post.image} alt="" />
+            <div className="rounded-md overflow-hidden w-full h-[13rem]">
+                <img className='w-full h-full' src={post.image} alt="" />
             </div>
         </Link>
-        <div className="w-[90%] mx-auto flex pt-2 justify-between items-center">
+        <div className="flex pt-2 justify-between items-center">
             <Link to={`/profile/${user[0]?._id}`} className="flex gap-1 items-center">
                 <Avatar img={user[0]?.picture} size='sm' rounded/>
                 <span className='text-xs dark:text-slate-300'>{user[0]?.username}</span>

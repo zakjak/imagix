@@ -64,11 +64,11 @@ useEffect(() => {
 
   return (
     <div className="mb-10">
-      <div className='w-[80%] mx-auto mt-5 grid grid-cols-2 gap-3 md:grid-cols-3'>
+      <div className='w-[92%] mx-auto mt-5 grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-4'>
       {
         posts && (
           posts.map(post => (
-            <Card key={post._id} post={post} />
+            <Card key={post._id} posts={posts} post={post} setPosts={setPosts} />
           ))
       
           )

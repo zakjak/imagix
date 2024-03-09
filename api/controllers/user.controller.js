@@ -54,7 +54,7 @@ export const getUser = async(req, res, next) => {
             res.status(200).json(data)
         }else{
             const {password, ...rest} = users[0]?._doc
-            res.status(200).json([rest])
+            res.status(200).json(rest)
         }
     
     }catch(err){

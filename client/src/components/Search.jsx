@@ -30,7 +30,7 @@ function Search() {
   return (
     <div className='w-full mx-8'>
         <form onSubmit={handleSubmit}>
-            <TextInput value={searchTermUrl} onChange={e => setSearchTermUrl(e.target.value)} className='border-none outline-none focus:outline-none text-sm' addon={<FaSearch className='text-gray-400' />}  placeholder='Search...' />
+            <TextInput value={searchTermUrl} onChange={e => setSearchTermUrl(e.target.value)} className='border0 outline-none focus:outline-none text-sm' addon={<FaSearch onClick={handleSubmit} className='text-gray-400 cursor-pointer' />}  placeholder='Search...' />
         </form>
     </div>
   )

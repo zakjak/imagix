@@ -50,29 +50,32 @@ function SearchIterms() {
     <div className='w-full p-5'>
         <h1 className='text-center mt-6 text-md dark:text-slate-200 text-gray-500'>Search results: <span className='text-xl dark:text-white'>{searchTermUrl}</span></h1>
         {
-            posts?.length > 0 && (
-                <div className='grid grid-cols-4 gap-4 w-[80%] mx-auto mt-6'>
-                    {posts?.map(post => (
-                        <CardSearch 
-                            key={post._id} 
-                            post={post} 
-                            posts={posts} 
-                            setPosts={setPosts} 
-                        />
-                    ))}
-                </div>
-            )
-        }
-        {
             users.length > 0 && (
                 <div className="w-[80%] mx-auto mt-8 p-4 bg-slate-100 dark:bg-gray-800  rounded-2xl shadow-lg  dark:shadow-md">
-                    <h1 className='text-2xl'>People</h1>
+                    <h1 className='text-xl'>People</h1>
                     {users?.map(user => (
                         <UserCard key={user?._id} user={user} setUser={setUsers} users={users} />
                     ))}
                 </div>
             )
         }
+        <div className="w-[80%] mx-auto mt-6">
+            <h1 className='text-xl'>Post found</h1>
+            {
+                posts?.length > 0 && (
+                    <div className='grid grid-cols-4 gap-4 mt-4 w-full'>
+                        {posts?.map(post => (
+                            <CardSearch 
+                                key={post._id} 
+                                post={post} 
+                                posts={posts} 
+                                setPosts={setPosts} 
+                            />
+                        ))}
+                    </div>
+                )
+            }
+        </div>
     </div>
   )
 }
