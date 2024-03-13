@@ -4,14 +4,32 @@ const MessageSchema = new mongoose.Schema({
     message: {
         msg: String
     },
-    from: {
-        sender: String
+    sender: {
+        sender: String,
+        ref: 'User',
     },
-    to: {
-        receiver: String
-    }
-})
+    receiver: {
+        receiver: String,
+        ref: 'User'
+    }, 
+    replies: [
+        {
+            sender: {
+                type: String, 
+                required: true
+            },
+            content: {
+                type: String, 
+                required: true,
+            },
+            timestamp: {
+                type: Date, 
+                default: Date.now,
+            },
+        }
+    ]
+}, {timestamps: true})
 
-const MessageModel = mongoose.model('Message', MessageSchema)
+const Message = mongoose.model('Message', MessageSchema)
 
-export default MessageModel
+export default Message

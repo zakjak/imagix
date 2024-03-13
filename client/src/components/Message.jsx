@@ -2,9 +2,13 @@ import { Avatar, Button } from 'flowbite-react'
 import { useState } from 'react';
 import { FaPlay } from 'react-icons/fa'
 import { IoIosClose } from "react-icons/io";
+import {  } from 'socket.io-client'
 
 const Message = ({ user, setOpenMessage }) => {
     const [message, setMessage] = useState('')
+
+    
+
 
   return (
     <div
@@ -13,7 +17,7 @@ const Message = ({ user, setOpenMessage }) => {
         <div className="w-full border-b border-gray-400 h-[10%] flex items-center px-2 justify-between">
             <div className="flex items-center gap-1">
                 <Avatar img={user?.picture} rounded size='sm'  />
-                <span className='text-gray-600 text-sm font-semibold'>{user?.username}</span>
+                <span className='text-gray-600 dark:text-gray-200 text-sm font-semibold'>{user?.username}</span>
             </div>
             <div onClick={() => setOpenMessage(false)} className='bg-gray-700 text-white hover:bg-gray-900 cursor-pointer p-1 rounded-full text-2xl'>
                 <IoIosClose />
