@@ -25,20 +25,17 @@ export const updateUser = async (req, res, next) => {
 }
 
 export const getUser = async(req, res, next) => {
-    const { userId, searchTerm, order, limits, followersId } = req.query
-
+    const { userId, searchTerm, order, limits} = req.query
     if(userId === '' && !userId || 
-    searchTerm === '' && !searchTerm || 
-    followersId === '' && !followersId){
+    searchTerm === '' && !searchTerm){
         return next(errorHandler(404, 'No user found!'))
     }
 
     try{
-        const sorDirection = parseInt(order) === 'asc' ? 1 : 1
+        const sorDirection = parseInt(order) === 'asc' ? 1 : -1
         const limit = parseInt(limits) || 9
         const users = await User.find({
             ...(userId && {_id: userId}),
-            ...(followersId && {$all: followersId}),
             ...(searchTerm && {
                 $or: [
                     {username: {$regex: `${searchTerm}`, $options: 'i'}}
@@ -46,24 +43,47 @@ export const getUser = async(req, res, next) => {
             })
         }).sort({ createdAt: sorDirection }).limit(limit)
 
-        if(users.length > 1){
-            const data = users.map(user => {
-                const {password, ...rest} = user?._doc
-                return rest
-            })
-            res.status(200).json(data)
-        }else{
             const {password, ...rest} = users[0]?._doc
             res.status(200).json(rest)
-        }
     
     }catch(err){
         console.log(err)
     }
 }
 
+// FOLLOWERS
+export const getFollowers = async (req, res, next)=> {
+    const { followersId, order, limits } = req.query
+
+    const followersArray = followersId.split(',')
+    console.log(followersArray)
+
+
+    if(!followersId || followersId === ''){
+        return next(errorHandler(404, 'Followers not found'))
+    }
+
+    try{
+        const sorDirection = parseInt(order) === 'asc' ? 1 : -1
+        const limit = parseInt(limits) || 9
+            const followers = await User.find({
+                ...(followersId && {_id: {$in: followersArray}}),
+            }).sort({createdAt: sorDirection}).limit(limit)
+
+            res.status(200).json(followers)
+
+    }catch(err){
+        console.log(err)
+    }
+
+
+}
+
+
 export const followUser = async(req, res, next) =>{
     const { followerId, userId } = req.params
+
+    if(followerId === '' && !followerId){}
 
     if(!req.user.id){
         return next(errorHandler(404, 'Sign in to follower user'))

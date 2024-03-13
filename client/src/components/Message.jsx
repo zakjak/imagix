@@ -14,6 +14,7 @@ const Message = ({ user, setOpenMessage }) => {
     <div
         className='w-[26rem] h-[30rem] z-10 rounded-lg fixed bottom-4 right-10 bg-gray-200 dark:bg-slate-800 shadow-lg' 
     >
+        <div className="relative"></div>
         <div className="w-full border-b border-gray-400 h-[10%] flex items-center px-2 justify-between">
             <div className="flex items-center gap-1">
                 <Avatar img={user?.picture} rounded size='sm'  />
@@ -23,12 +24,12 @@ const Message = ({ user, setOpenMessage }) => {
                 <IoIosClose />
             </div>
         </div>
-        <div className="w-full h-[70%] p-2 overflow-y-scroll">
+        <div className="w-full h-[70%] p-2 overflow-y-scroll flex flex-col gap-3">
             <div className="w-[90%]">
                 <div className="flex gap-2 items-start">
                         <Avatar className='max- max-w-[2rem] min-w-[2rem]' img={user?.picture} rounded size='sm' />
                     <div className="bg-slate-900 dark:bg-gray-200 p-2 rounded-lg">
-                        <p className='text-gray-100 dark:text-slate-900 tracking-tight 
+                        <p className='text-gray-100 dark:text-slate-900 tracking-tighter 
                             text-justify text-sm'>Lorem ipsum dolor sit, 
                             amet consectetur adipisicing elit. Aspernatur 
                             laudantium assumenda autem blanditiis illum doloribus 
@@ -47,7 +48,12 @@ const Message = ({ user, setOpenMessage }) => {
             {
                 message && (
                     <div className='flex justify-between items-center px-2'>
-                        <span>{`${message.length === 1 ? `${message.length} character` : `${message.length} characters`}`}</span>
+                        <span className='text-sm text-gray-500 
+                        dark:text-gray-300'>
+                            {`${message.length === 1 ? 
+                                `${message.length} character` : 
+                                `${message.length} characters`}`}
+                        </span>
                         <Button className='mx-2' color='dark'>
                             <FaPlay />
                         </Button>

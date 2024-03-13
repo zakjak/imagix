@@ -23,6 +23,9 @@ function Profile() {
   const { currentUser } = useSelector(state => state.user)
   const fileInput = useRef(null)
   const [openMessage, setOpenMessage] = useState(false)
+  const [openFollower, setOpenFollower] = useState(false)
+  const [openFollowing, setOpenFollowing] = useState(false)
+  const [followers, setFollowers] = useState([])
 
   const { inView, ref: refView } = useInView()
 
@@ -35,7 +38,8 @@ function Profile() {
   
   useEffect(() => {
     getUser()
-  }, [userId.id])
+    getFollowers()
+  }, [userId.id, user?._id])
   
   const getUser = async () =>{
     try{
@@ -43,7 +47,6 @@ function Profile() {
       
       if(res.ok){
         const data = await res.json()
-        console.log(data)
         setUser(data)
       }
       
@@ -52,6 +55,25 @@ function Profile() {
     }
   }
 
+  const getFollowers = async () => {
+    if(user?.followers === undefined){
+      return
+    }
+
+    const queryString = user?.followers.join(',')
+    
+    try{
+        const res = await fetch(`/api/user/getFollowers?followersId=${queryString}`)
+        const data = await res.json()
+
+        if(res.ok){
+          setFollowers(data)
+        }
+      
+    }catch(err){
+      console.log(err)
+    }
+  }
 
   const getPosts = async () => {
       const res = await fetch(`/api/post/getPost?ownerId=${userId.id}`)
@@ -65,8 +87,6 @@ function Profile() {
 useEffect(() => {
   getPosts()
 }, [userId.id])
-
-
 
   const handleChange = (e) => {
     const file = e.target.files[0]
@@ -151,10 +171,18 @@ useEffect(() => {
                   <span className="text-lg dark:text-gray-300 font-semibold">{user?.following?.length}</span>
                   <span className="text-xs font-semibold">Following</span>
                 </Link>
-                <Link onClick={() => handleFollowers(user?.following)} to={`/profile/${user?._id}/followers`} className="flex items-baseline gap-1">
+                <div onClick={() => setOpenFollower(true)} className="flex cursor-pointer items-baseline gap-1">
                   <span className="dark:text-gray-300 text-lg font-semibold">{user?.followers?.length}</span>
                   <span className="text-xs font-semibold">Followers</span>
-                </Link>
+                </div>
+                <Modal show={openFollower} onClose={() => setOpenFollower(false)}>
+                  <Modal.Header>Followers</Modal.Header>
+                  <Modal.Body>
+                    {/* <div className="">
+                      sadsddaads
+                    </div> */}
+                  </Modal.Body>
+                </Modal>
                 <div className="flex items-baseline gap-1">
                   <span className="dark:text-gray-300 text-lg font-semibold">{posts?.postCount}</span>
                   <span className="text-xs font-semibold">Posts</span>
