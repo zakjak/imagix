@@ -14,6 +14,7 @@ import Card from '../components/Card'
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage"
 import { app } from "../firebase";
 import Message from "../components/Message";
+import FollowModal from "../components/FollowModal";
 
 function Profile() {
   const [openModal, setOpenModal] = useState(false)
@@ -25,6 +26,7 @@ function Profile() {
   const [openMessage, setOpenMessage] = useState(false)
   const [openFollower, setOpenFollower] = useState(false)
   const [openFollowing, setOpenFollowing] = useState(false)
+  const [follow, setFollow] = useState('')
   const [followers, setFollowers] = useState([])
 
   const { inView, ref: refView } = useInView()
@@ -38,8 +40,7 @@ function Profile() {
   
   useEffect(() => {
     getUser()
-    getFollowers()
-  }, [userId.id, user?._id])
+  }, [userId.id])
   
   const getUser = async () =>{
     try{
@@ -55,12 +56,15 @@ function Profile() {
     }
   }
 
-  const getFollowers = async () => {
-    if(user?.followers === undefined){
+  const getFollowers = async (followId) => {
+    if(followId === undefined || !followId || 
+      followId === '' || !followId.length){
       return
     }
 
-    const queryString = user?.followers.join(',')
+    console.log(followId)
+
+    const queryString = followId.join(',')
     
     try{
         const res = await fetch(`/api/user/getFollowers?followersId=${queryString}`)
@@ -74,6 +78,7 @@ function Profile() {
       console.log(err)
     }
   }
+
 
   const getPosts = async () => {
       const res = await fetch(`/api/post/getPost?ownerId=${userId.id}`)
@@ -125,6 +130,20 @@ useEffect(() => {
     })
   }
 
+  const handleFollowerModal = () =>{
+    setOpenFollower(true)
+    setFollowers([])
+    setFollow('followers')
+    getFollowers(user?.followers)
+  }
+
+  const handleFollowingModal = () => {
+    setOpenFollower(true)
+    setFollowers([])
+    setFollow('following')
+    getFollowers(user?.following)
+  }
+
   return (
     <div className="w-full min-h-screen flex-wrap pb-4">
       <div style={{ backgroundImage: `url(${user?.banner})` }} className={' relative h-[20rem] bg-no-repeat bg-center aspect-auto bg-cover'}>
@@ -167,22 +186,26 @@ useEffect(() => {
             <div className="flex justify-between">
               <h2 className="font-semibold text-md ml-4 lg:ml-12 md:text-lg whitespace-nowrap">{user?.username}</h2>
               <div className="flex gap-4 overflow-clip">
-                <Link to={`/profile/${user?._id}/following`} className='flex items-baseline gap-1'>
+                <div onClick={() => handleFollowingModal()} className='flex items-baseline gap-1 cursor-pointer'>
                   <span className="text-lg dark:text-gray-300 font-semibold">{user?.following?.length}</span>
                   <span className="text-xs font-semibold">Following</span>
-                </Link>
-                <div onClick={() => setOpenFollower(true)} className="flex cursor-pointer items-baseline gap-1">
+                </div>
+                <FollowModal 
+                  setOpenFollower={setOpenFollowing} 
+                  openFollower={openFollowing}
+                  followers={followers}
+                  follow={follow}
+                />
+                <div onClick={() => handleFollowerModal()} className="flex cursor-pointer items-baseline gap-1">
                   <span className="dark:text-gray-300 text-lg font-semibold">{user?.followers?.length}</span>
                   <span className="text-xs font-semibold">Followers</span>
                 </div>
-                <Modal show={openFollower} onClose={() => setOpenFollower(false)}>
-                  <Modal.Header>Followers</Modal.Header>
-                  <Modal.Body>
-                    {/* <div className="">
-                      sadsddaads
-                    </div> */}
-                  </Modal.Body>
-                </Modal>
+                <FollowModal 
+                  setOpenFollower={setOpenFollower} 
+                  openFollower={openFollower}
+                  followers={followers} 
+                  follow={follow}
+                />
                 <div className="flex items-baseline gap-1">
                   <span className="dark:text-gray-300 text-lg font-semibold">{posts?.postCount}</span>
                   <span className="text-xs font-semibold">Posts</span>

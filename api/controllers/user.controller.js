@@ -56,7 +56,6 @@ export const getFollowers = async (req, res, next)=> {
     const { followersId, order, limits } = req.query
 
     const followersArray = followersId.split(',')
-    console.log(followersArray)
 
 
     if(!followersId || followersId === ''){

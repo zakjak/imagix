@@ -3,7 +3,6 @@ import Home from './pages/Home'
 import NavComponent from './components/NavComponent'
 import Profile from './pages/Profile'
 import Post from './pages/Post'
-import FollowPage from './pages/FollowPage'
 import SearchIterms from './pages/SearchIterms'
 
 function App() {
