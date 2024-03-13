@@ -1,8 +1,8 @@
 import { useSelector } from "react-redux"
 import { MdEdit } from "react-icons/md";
 import { useEffect, useRef, useState } from 'react'
-import { Button, Modal } from 'flowbite-react'
-import { FaRegEnvelope } from 'react-icons/fa'
+import { Avatar, Button, Modal } from 'flowbite-react'
+import { FaPlay, FaRegEnvelope } from 'react-icons/fa'
 import EditModal from "../components/EditModal";
 import { LuPlus } from "react-icons/lu";
 import CreateModal from "../components/CreateModal";
@@ -13,6 +13,7 @@ import { useInView } from 'react-intersection-observer'
 import Card from '../components/Card'
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage"
 import { app } from "../firebase";
+import Message from "../components/Message";
 
 function Profile() {
   const [openModal, setOpenModal] = useState(false)
@@ -21,10 +22,9 @@ function Profile() {
   const [user, setUser] = useState([])
   const { currentUser } = useSelector(state => state.user)
   const fileInput = useRef(null)
+  const [openMessage, setOpenMessage] = useState(false)
 
   const { inView, ref: refView } = useInView()
-
-  
 
   const userId = useParams()
 
@@ -67,37 +67,6 @@ useEffect(() => {
 }, [userId.id])
 
 
-// const { 
-//   data, status, error, fetchNextPage, hasNextPage
-// } = useInfiniteQuery({
-//   queryKey: ['posts'],
-//   queryFn: getPost,
-//   initialPageParam: 1,
-//   getNextPageParam: (lastPage, allPages) => {
-    // console.log(lastPage)
-    // console.log(allPages)
-    // return allPages[0]?.posts?.length + 1
-//     const nextPage = lastPage?.posts.length ? allPages[0]?.posts.length + 1 : undefined
-//     return nextPage
-//   }
-// })
-
-// const content = data?.pages.map(posts => 
-//   posts?.posts?.map((post, i) => {
-//     if(posts?.posts.length === i + 1){
-//       return <Card  post={post} key={post._id} innerRef={refView}  />
-//     }else{
-//       return <Card key={post._id} post={post} />
-//     }
-// })
-// )
-
-
-  // useEffect(() => {
-  //   if(inView && hasNextPage){
-  //     fetchNextPage()
-  //   }
-  // }, [inView, hasNextPage, fetchNextPage, userId.id])
 
   const handleChange = (e) => {
     const file = e.target.files[0]
@@ -136,9 +105,8 @@ useEffect(() => {
     })
   }
 
-
   return (
-    <div className="w-full min-h-full flex-wrap pb-4">
+    <div className="w-full min-h-screen flex-wrap pb-4">
       <div style={{ backgroundImage: `url(${user?.banner})` }} className={' relative h-[20rem] bg-no-repeat bg-center aspect-auto bg-cover'}>
         <input onChange={handleChange} type="file" className="hidden" ref={fileInput} />
         {
@@ -164,7 +132,7 @@ useEffect(() => {
                         'Following' : 'Follow'
                       }
                       </Button>
-                      <Button color="light" className="p-0"><FaRegEnvelope /></Button>
+                      <Button color="light" className="p-0" onClick={() => setOpenMessage(true)}><FaRegEnvelope /></Button>
                     </>
 
                   ): (
@@ -222,6 +190,11 @@ useEffect(() => {
                         )
                       }
                     </div>
+                    {
+                      openMessage && (
+                        <Message user={user} setOpenMessage={setOpenMessage} />
+                      )
+                    }
                
               </div>
             </div>

@@ -85,10 +85,7 @@ function Comment({ setComments, comments, comment, currentUser, showLikeToast, s
                         <span 
                             className='text-sm'
                         >
-                            {`${comment?.numberOfLikes > 0 ? 
-                                numberManipulate(comment?.numberOfLikes) === 1 ? 
-                                `${numberManipulate(comment?.numberOfLikes)} like` : 
-                                `${numberManipulate(comment?.numberOfLikes)} likes` : ''}`}
+                            {comment?.numberOfLikes >= 1 && numberManipulate(comment?.numberOfLikes)}
                         </span>
                     </div>
                     {/* <div className="text-sm cursor-pointer" title='reply'>Reply</div> */}
