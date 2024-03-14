@@ -244,7 +244,7 @@ useEffect(() => {
                     </div>
                     {
                       openMessage && (
-                        <Message user={user} setOpenMessage={setOpenMessage} />
+                        <Message user={user} openMessage={openMessage} setOpenMessage={setOpenMessage} />
                       )
                     }
                

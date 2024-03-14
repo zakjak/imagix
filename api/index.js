@@ -9,6 +9,7 @@ import commentRouter from './routes/comment.router.js'
 import cookieParser from "cookie-parser";
 import bodyParser from 'body-parser'
 import { createServer } from 'http'
+import { Server } from 'socket.io'
 
 const app = express()
 export const httpServer = createServer(app)
@@ -39,6 +40,36 @@ app.use('/api/post', postRouter)
 app.use('/api/comment', commentRouter)
 
 const PORT = process.env.PORT
+
+// CHAT LOGIC
+const io = new Server(httpServer, {
+    cors: {
+        origin: '*',
+        methods: ['GET', 'POST']
+    }
+})
+
+let onlineUsers = []
+
+const addNewUser = (userId, socketId) => {
+    !onlineUsers.some(user => user.userId === userId) && 
+    onlineUsers.push({userId, socketId})
+}
+
+const removeUser = (socketId) => {
+    onlineUsers.filter(user => user.socketId !== socketId)
+}
+
+const getUser = (userId) => {
+    return onlineUsers.find(user => user.userId === userId)
+}
+
+io.on('connection', (socket) => {
+    socket.on('newUser', (userId) => {
+        addNewUser(userId, socket.id)
+        console.log(onlineUsers)
+    })
+})
 
 httpServer.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`)

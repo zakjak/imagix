@@ -1,14 +1,17 @@
 import { Avatar, Button } from 'flowbite-react'
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FaPlay } from 'react-icons/fa'
 import { IoIosClose } from "react-icons/io";
-import {  } from 'socket.io-client'
+import { io } from 'socket.io-client'
 
-const Message = ({ user, setOpenMessage }) => {
+const Message = ({ user, setOpenMessage, openMessage }) => {
     const [message, setMessage] = useState('')
+    const socket = io('http://localhost:3000/api/message')
 
+    useEffect(() => {
+        socket?.emit('newUser', user?.id)
+    }, [socket, user?.id, openMessage])
     
-
 
   return (
     <div
