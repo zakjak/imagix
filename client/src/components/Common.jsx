@@ -12,7 +12,7 @@ export const numberManipulate = (num) => {
     }
 }
 
-export const follow = async (userId, currentUserId, currentUser, setUser, user) => {
+export const handleFollow = async (userId, currentUserId, currentUser, setUser, user) => {
     try{
         if(currentUser && userId && currentUser){
             const res = await fetch(`/api/user/getUser/${userId}/${currentUserId}`, {
@@ -22,9 +22,9 @@ export const follow = async (userId, currentUserId, currentUser, setUser, user) 
 
             if(res.ok){
                 const data = await res.json()
-                setUser(user.map(action => 
-                    action._id === userId ? {
-                        ...action,
+                setUser(user && ( 
+                    user?._id === userId ? {
+                        ...user,
                         followers: data.followers,
                         following: data.following
                     }:

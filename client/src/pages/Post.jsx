@@ -4,7 +4,7 @@ import { Link, useParams } from 'react-router-dom'
 import { FaPlay } from "react-icons/fa";
 import { useSelector } from 'react-redux';
 import { Toast } from 'flowbite-react'; 
-import { follow, numberManipulate } from '../components/Common';
+import { handleFollow, numberManipulate } from '../components/Common';
 import Comment from '../components/Comment';
 import moment from 'moment';
 
@@ -158,7 +158,7 @@ function Post() {
                         <div className='flex justify-between'>
                             {
                                 currentUser?._id !== user[0]?._id && (
-                                    <Button color='dark' onClick={() => follow(user?._id, currentUser?._id, currentUser, setUser, user)}>
+                                    <Button color='dark' onClick={() => handleFollow(user?._id, currentUser?._id, currentUser, setUser, user)}>
                                         {
                                             user?.followers?.includes(currentUser?._id) ? 
                                             'Following' : 'Follow'

@@ -1,6 +1,6 @@
 import { Avatar, Button } from 'flowbite-react'
 import React, { useEffect } from 'react'
-import { follow } from './Common'
+import { handleFollow } from './Common'
 import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 
@@ -18,7 +18,7 @@ const UserCard = ({ user, setUser, users }) => {
         </Link>
         {
             currentUser._id !== user?._id && (
-                <Button color='dark' onClick={() => follow(user?._id, currentUser?._id, currentUser, setUser, [user])}>
+                <Button color='dark' onClick={() => handleFollow(user?._id, currentUser?._id, currentUser, setUser, [user])}>
                 {
                     user?.followers?.includes(currentUser?._id) ? 
                     'Following' : 'Follow'

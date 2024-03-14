@@ -7,7 +7,7 @@ import EditModal from "../components/EditModal";
 import { LuPlus } from "react-icons/lu";
 import CreateModal from "../components/CreateModal";
 import { Link, useParams } from "react-router-dom";
-import { follow } from "../components/Common";
+import { handleFollow } from "../components/Common";
 import { useInfiniteQuery } from '@tanstack/react-query'
 import { useInView } from 'react-intersection-observer'
 import Card from '../components/Card'
@@ -165,7 +165,7 @@ useEffect(() => {
                 {
                   user?._id !== currentUser?._id ? (
                     <>
-                      <Button color="dark" className="p-0" onClick={() => follow(user?._id, currentUser?._id, currentUser, setUser, user)}>
+                      <Button color="dark" className="p-0" onClick={() => handleFollow(user?._id, currentUser?._id, currentUser, setUser, user)}>
                       {
                         user?.followers?.includes(currentUser?._id) ? 
                         'Following' : 'Follow'
