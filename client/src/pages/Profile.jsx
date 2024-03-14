@@ -62,7 +62,6 @@ function Profile() {
       return
     }
 
-    console.log(followId)
 
     const queryString = followId.join(',')
     
@@ -195,6 +194,7 @@ useEffect(() => {
                   openFollower={openFollowing}
                   followers={followers}
                   follow={follow}
+                  setFollowers={setFollowers}
                 />
                 <div onClick={() => handleFollowerModal()} className="flex cursor-pointer items-baseline gap-1">
                   <span className="dark:text-gray-300 text-lg font-semibold">{user?.followers?.length}</span>
@@ -205,6 +205,7 @@ useEffect(() => {
                   openFollower={openFollower}
                   followers={followers} 
                   follow={follow}
+                  setFollowers={setFollowers}
                 />
                 <div className="flex items-baseline gap-1">
                   <span className="dark:text-gray-300 text-lg font-semibold">{posts?.postCount}</span>

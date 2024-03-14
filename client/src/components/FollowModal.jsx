@@ -4,13 +4,39 @@ import { useSelector } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
 
 
-const FollowModal = ({ openFollower, setOpenFollower, followers, follow}) => {
+const FollowModal = ({ openFollower, setOpenFollower, followers, follow, setFollowers}) => {
     const { currentUser } = useSelector(state => state.user)
     const navigate = useNavigate()
 
     const handleNavigate = (followerId) => {
         setOpenFollower(false)
         navigate(`/profile/${followerId}`)
+    }
+
+
+    const handleFollow = async (userId, currentUserId, currentUser, setUser, follower) => {
+        try{
+            if(currentUser && userId && currentUser){
+                const res = await fetch(`/api/user/getUser/${userId}/${currentUserId}`, {
+                    method: 'PUT',
+                    headers: {'Content-Type': 'application/json'},
+                })
+    
+                if(res.ok){
+                    const data = await res.json()
+                    setFollowers(followers.map(follower =>
+                        follower._id === userId ? {
+                            ...follower,
+                            followers: data.followers,
+                            following: data.following
+                        }: follower
+                    ))
+                }
+            }
+    
+        }catch(err){
+            console.log(err)
+        }
     }
     
   return (
@@ -33,7 +59,7 @@ const FollowModal = ({ openFollower, setOpenFollower, followers, follow}) => {
                                     </div>
                                     {
                                         currentUser._id !== follower?._id && (
-                                            <Button color='dark'>
+                                            <Button onClick={() => handleFollow(follower?._id, currentUser?._id, currentUser, setFollowers, follower)} color='dark'>
                                                 {
                                                     follower?.followers?.includes(currentUser._id) ? 
                                                     'Following' : 'Follow'

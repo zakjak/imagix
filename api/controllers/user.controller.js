@@ -57,7 +57,6 @@ export const getFollowers = async (req, res, next)=> {
 
     const followersArray = followersId.split(',')
 
-
     if(!followersId || followersId === ''){
         return next(errorHandler(404, 'Followers not found'))
     }
@@ -70,6 +69,7 @@ export const getFollowers = async (req, res, next)=> {
             }).sort({createdAt: sorDirection}).limit(limit)
 
             res.status(200).json(followers)
+        
 
     }catch(err){
         console.log(err)

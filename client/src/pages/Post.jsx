@@ -53,9 +53,6 @@ function Post() {
         }
       }
 
-      console.log(user)
-
-    
       const getComment = async () =>{
         try{
           const res = await fetch(`/api/comment/getComment?postId=${posts[0]?._id}`)

@@ -29,14 +29,13 @@ export const handleFollow = async (userId, currentUserId, currentUser, setUser, 
                         following: data.following
                     }:
                     user
-                    ))
-
+                ))
             }
         }
 
     }catch(err){
         console.log(err)
     }
-  }
+}
 
   
