@@ -8,11 +8,11 @@ import postRouter from './routes/post.route.js'
 import commentRouter from './routes/comment.router.js'
 import cookieParser from "cookie-parser";
 import bodyParser from 'body-parser'
-import { createServer } from 'http'
-import { Server } from 'socket.io'
+// import { createServer } from 'http'
+// import { Server } from 'socket.io'
 
 const app = express()
-export const httpServer = createServer(app)
+// export const httpServer = createServer(app)
 
 // Middleware
 dotenv.config()
@@ -51,7 +51,7 @@ const PORT = process.env.PORT
 
 
 
-httpServer.listen(PORT, () => {
+app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`)
 })
 
