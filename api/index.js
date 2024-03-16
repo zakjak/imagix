@@ -33,7 +33,6 @@ mongoose.connect(process.env.MONGO_URL)
 .then(console.log('Database Connected'))
 
 
-
 app.use('/api/auth', authRouter)
 app.use('/api/user', userRouter)
 app.use('/api/post', postRouter)
@@ -64,10 +63,30 @@ const getUser = (userId) => {
     return onlineUsers.find(user => user.userId === userId)
 }
 
+let live = ''
+
 io.on('connection', (socket) => {
-    socket.on('newUser', (userId) => {
-        addNewUser(userId, socket.id)
-        console.log(onlineUsers)
+
+    socket.emit('otherUser', socket.id)
+
+    socket.on('userOnline', (data) => {
+        addNewUser(data?.liveUser, data.liveSocket)
+        // live =  data.liveSocket
+        // console.log(data)
+    })
+
+    socket.emit('liveUser', live)
+
+    socket.on('join', (data) => {
+        // const onlineUser = getUser(data.receiver)
+        // socket.join(onlineUser.)
+        // socket.join([data.sender, data.receiver])
+    })
+
+    socket.on('message', (data) => {
+        const onlineUser = getUser(data.userId)
+        // socket.join([data., data.receiver])
+        io.to().emit('sent_message', data)
     })
 })
 

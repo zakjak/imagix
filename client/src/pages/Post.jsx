@@ -127,11 +127,9 @@ function Post() {
         window.history.pushState(`/profile/${postOwner}`)
         window.location.reload()
       }
-
-
-      
+  
   return (
-    <div className='my-6 w-[80%] mx-auto bg-gray-300 dark:bg-gray-900 rounded-xl'>
+    <div className='my-6 w-[96%] min-w-[30rem] md:[80%]  mx-auto bg-gray-300 dark:bg-gray-900 rounded-xl'>
             {
                 posts?.map(post => (
                     <div key={post?._id} className="w-[95%] mx-auto rounded-xl">
@@ -165,11 +163,11 @@ function Post() {
                             }
                             </div>
                         </div>
-                        <div className="mt-2">
-                            <p className='text-base md:px-2 w-[90%]'>{post?.desc}</p>
+                        <div className="my-2">
+                            <p className='text-sm md:px-2 w-[90%] text-slate-100'>{post?.desc}</p>
                         </div>
-                        <div className="w-full mt-4 h-[33rem] overflow-hidden">
-                            <img className='w-full h-[140%] object-cover' src={post.image} alt="" />
+                        <div className="w-full rounded-2xl shadow-2xl shadow-gray-700 overflow-hidden">
+                            <img className='w-full h-full object-contain' src={post.image} alt="" />
                         </div>
                         <div className="mt-2">
                                     {

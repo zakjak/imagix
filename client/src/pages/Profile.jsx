@@ -15,6 +15,7 @@ import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/
 import { app } from "../firebase";
 import Message from "../components/Message";
 import FollowModal from "../components/FollowModal";
+import { io } from 'socket.io-client'
 
 function Profile() {
   const [openModal, setOpenModal] = useState(false)
@@ -28,6 +29,8 @@ function Profile() {
   const [openFollowing, setOpenFollowing] = useState(false)
   const [follow, setFollow] = useState('')
   const [followers, setFollowers] = useState([])
+
+  const socket = io('http://localhost:3000')
 
   const { inView, ref: refView } = useInView()
 
@@ -142,6 +145,26 @@ useEffect(() => {
     setFollow('following')
     getFollowers(user?.following)
   }
+
+  useEffect(() => {
+    if(user._id !== currentUser?._id){
+      socket.on('otherUser', (data) => {
+        socket.emit('join', {sender: currentUser?._id, receiver: user?._id})
+        socket.emit('userOnline', { liveUser: currentUser._id,  liveSocket: data})
+      })
+      // socket.emit('userOnline', currentUser?._id)
+    }
+  }, [socket])
+
+//   useEffect(() => {
+//     if(user?._id === currentUser?._id){
+//       socket.on('onlineSocket', (data) => {
+//         socket.emit('newUser', {userId: user?._id, socketId: data})
+//       })
+//     }else{
+//       ret
+//     }
+// }, [socket, user?._id])
 
   return (
     <div className="w-full min-h-screen flex-wrap pb-4">

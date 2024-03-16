@@ -83,6 +83,7 @@ const open = Boolean(openPopover)
       whileInView={{ opacity: 1 }}
       viewport={{ once: true }}
       transition={{ delay: 0.1 }}
+      // className='min-w-[20rem]'
     >
       <Link 
         ref={innerRef} 
@@ -91,9 +92,9 @@ const open = Boolean(openPopover)
         to={`/post/${post._id}`} 
         className='rounded-lg overflow-hidden shadow-xl 
         dark:shadow-gray-900'>
-          <div className="w-full h-[15rem] rounded-md overflow-hidden">
-            <img className='w-full h-[130%] object-cover' 
-            src={post.image} alt={`${post?.desc}`} />
+          <div className="w-full h-[15rem] md:h-[18rem] rounded-md overflow-hidden">
+            <img className='w-full h-full object-cover' 
+              src={post.image} alt={`${post?.desc}`} />
           </div>
       </Link>
       {

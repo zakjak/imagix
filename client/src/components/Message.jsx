@@ -2,15 +2,44 @@ import { Avatar, Button } from 'flowbite-react'
 import { useEffect, useState } from 'react';
 import { FaPlay } from 'react-icons/fa'
 import { IoIosClose } from "react-icons/io";
+import { useSelector } from 'react-redux';
 import { io } from 'socket.io-client'
 
-const Message = ({ user, setOpenMessage, openMessage }) => {
+const Message = ({ user, setOpenMessage, openMessage, userId }) => {
     const [message, setMessage] = useState('')
-    const socket = io('http://localhost:3000/api/message')
+    const [sentMessage, setSentMessage] = useState({})
+    const { currentUser } = useSelector(state => state.user)
+    const [socketId, setSocketId] = useState('')
+    const [liveUser, setLiveUser] = useState('')
+    
+    const socket = io('http://localhost:3000')
 
     useEffect(() => {
-        socket?.emit('newUser', user?.id)
-    }, [socket, user?.id, openMessage])
+        if(user?._id !== currentUser?._id){
+            
+        }
+        
+    }, [socket])
+
+    const handleSubmit = (e) => {
+        e.preventDefault()
+        const userId = user?._id
+
+            socket.emit('message', {message, userId, senderId: currentUser._id})      
+  
+    }
+
+    useEffect(() => {
+        
+        socket.on('liveUser', (data) => {
+                setLiveUser(data)
+        })
+    
+        socket.on('sent_message', (data) => {
+            setSentMessage(data)
+            alert('hi')
+        })
+    }, [socket])
     
 
   return (
@@ -43,7 +72,7 @@ const Message = ({ user, setOpenMessage, openMessage }) => {
                 </div>
             </div>
         </div>
-        <div className=" w-full flex flex-col gap-1 border-t border-slate-400 h-[20%]">
+        <form onSubmit={handleSubmit} className=" w-full flex flex-col gap-1 border-t border-slate-400 h-[20%]">
             <textarea 
                 placeholder='Write your message?' 
                 onChange={e => setMessage(e.target.value)}
@@ -57,13 +86,13 @@ const Message = ({ user, setOpenMessage, openMessage }) => {
                                 `${message.length} character` : 
                                 `${message.length} characters`}`}
                         </span>
-                        <Button className='mx-2' color='dark'>
+                        <Button type='submit' className='mx-2' color='dark'>
                             <FaPlay />
                         </Button>
                     </div>
                 )
             }
-        </div>
+        </form>
     </div>
   )
 }
