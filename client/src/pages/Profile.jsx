@@ -30,7 +30,7 @@ function Profile() {
   const [follow, setFollow] = useState('')
   const [followers, setFollowers] = useState([])
 
-  const socket = io('http://localhost:3000')
+  // const socket = io('http://localhost:3000')
 
   const { inView, ref: refView } = useInView()
 
@@ -47,7 +47,7 @@ function Profile() {
   
   const getUser = async () =>{
     try{
-      const res = await fetch(`/api/user/getUser?userId=${userId.id}`)
+      const res = await fetch(`https://imagix-u57i.onrender.com/api/user/getUser?userId=${userId.id}`)
       
       if(res.ok){
         const data = await res.json()
@@ -69,7 +69,7 @@ function Profile() {
     const queryString = followId.join(',')
     
     try{
-        const res = await fetch(`/api/user/getFollowers?followersId=${queryString}`)
+        const res = await fetch(`https://imagix-u57i.onrender.com/api/user/getFollowers?followersId=${queryString}`)
         const data = await res.json()
 
         if(res.ok){
@@ -83,7 +83,7 @@ function Profile() {
 
 
   const getPosts = async () => {
-      const res = await fetch(`/api/post/getPost?ownerId=${userId.id}`)
+      const res = await fetch(`https://imagix-u57i.onrender.com/api/post/getPost?ownerId=${userId.id}`)
       const data = await res.json()
       
       if(res.ok){
@@ -117,7 +117,7 @@ useEffect(() => {
     }, () => {
       getDownloadURL(uploadTask.snapshot.ref).then((downloadUrl) => {
         console.log(downloadUrl)
-        fetch(`/api/user/update/${currentUser._id}`, {
+        fetch(`https://imagix-u57i.onrender.com/api/user/update/${currentUser._id}`, {
           method: 'PUT',
           headers: {'Content-Type': 'application/json'},
           body: JSON.stringify({
@@ -146,15 +146,15 @@ useEffect(() => {
     getFollowers(user?.following)
   }
 
-  useEffect(() => {
-    if(user._id !== currentUser?._id){
-      socket.on('otherUser', (data) => {
-        socket.emit('join', {sender: currentUser?._id, receiver: user?._id})
-        socket.emit('userOnline', { liveUser: currentUser._id,  liveSocket: data})
-      })
+  // useEffect(() => {
+  //   if(user._id !== currentUser?._id){
+  //     socket.on('otherUser', (data) => {
+  //       socket.emit('join', {sender: currentUser?._id, receiver: user?._id})
+  //       socket.emit('userOnline', { liveUser: currentUser._id,  liveSocket: data})
+      // })
       // socket.emit('userOnline', currentUser?._id)
-    }
-  }, [socket])
+    // }
+  // }, [socket])
 
 //   useEffect(() => {
 //     if(user?._id === currentUser?._id){

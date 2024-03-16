@@ -13,7 +13,7 @@ function Comment({ setComments, comments, comment, currentUser, showLikeToast, s
 
     useEffect(() => {
         const fetchUser = async () => {
-            const res = await fetch(`/api/user/getUser?userId=${comment?.owner}`)
+            const res = await fetch(`https://imagix-u57i.onrender.com/api/user/getUser?userId=${comment?.owner}`)
             const data = await res.json()
 
             if(res.ok){
@@ -24,7 +24,7 @@ function Comment({ setComments, comments, comment, currentUser, showLikeToast, s
     }, [comment])
 
     const handleDeleteComment = async (commentId) => {
-        const res = await fetch(`/api/comment/${commentId}/${user?._id}`, {
+        const res = await fetch(`https://imagix-u57i.onrender.com/api/comment/${commentId}/${user?._id}`, {
             method: 'DELETE',
         })
         const data = await res.json()
@@ -37,7 +37,7 @@ function Comment({ setComments, comments, comment, currentUser, showLikeToast, s
 
     const handleEditComment = async (e) => {
         e.preventDefault()
-        const res = await fetch(`/api/comment/${comment?._id}/${user?._id}`, {
+        const res = await fetch(`https://imagix-u57i.onrender.com/api/comment/${comment?._id}/${user?._id}`, {
             method: 'PUT',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({comment: editComment})

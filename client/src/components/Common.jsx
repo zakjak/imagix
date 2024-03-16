@@ -15,7 +15,7 @@ export const numberManipulate = (num) => {
 export const handleFollow = async (userId, currentUserId, currentUser, setUser, user) => {
     try{
         if(currentUser && userId && currentUser){
-            const res = await fetch(`/api/user/getUser/${userId}/${currentUserId}`, {
+            const res = await fetch(`https://imagix-u57i.onrender.com/api/user/getUser/${userId}/${currentUserId}`, {
                 method: 'PUT',
                 headers: {'Content-Type': 'application/json'},
             })

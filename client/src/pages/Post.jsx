@@ -26,7 +26,7 @@ function Post() {
     }, [postId, posts[0]?.owner])
     
     const getPost = async () => {
-        const res = await fetch(`/api/post/getPost?postId=${postId?.id}`)
+        const res = await fetch(`https://imagix-u57i.onrender.com/api/post/getPost?postId=${postId?.id}`)
         const data = await res.json()
         // console.log(data.posts)
     
@@ -40,7 +40,7 @@ function Post() {
             return;
         }
         try{
-          const res = await fetch(`/api/user/getUser?userId=${posts[0]?.owner}`)
+          const res = await fetch(`https://imagix-u57i.onrender.com/api/user/getUser?userId=${posts[0]?.owner}`)
           const data = await res.json()
     
           if(res.ok){
@@ -55,7 +55,7 @@ function Post() {
 
       const getComment = async () =>{
         try{
-          const res = await fetch(`/api/comment/getComment?postId=${posts[0]?._id}`)
+          const res = await fetch(`https://imagix-u57i.onrender.com/api/comment/getComment?postId=${posts[0]?._id}`)
     
           if(res.ok){
             const data = await res.json()
@@ -71,7 +71,7 @@ function Post() {
         e.preventDefault()
         try{
             if(currentUser){
-                const res = await fetch('/api/comment/createComment', {
+                const res = await fetch('https://imagix-u57i.onrender.com/api/comment/createComment', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({
@@ -98,7 +98,7 @@ function Post() {
       const likeComment = async (commentId) => {
         try{
             if(currentUser){
-                const res = await fetch(`/api/comment/likeComment/${commentId}/${currentUser?._id}`, {
+                const res = await fetch(`https://imagix-u57i.onrender.com/api/comment/likeComment/${commentId}/${currentUser?._id}`, {
                     method: 'PUT',
                 })
 
@@ -124,12 +124,12 @@ function Post() {
       }
 
       const profilePage = (postOwner) => {
-        window.history.pushState(`/profile/${postOwner}`)
+        window.history.pushState(`https://imagix-u57i.onrender.com/profile/${postOwner}`)
         window.location.reload()
       }
   
   return (
-    <div className='my-6 w-[96%] min-w-[30rem] md:[80%]  mx-auto bg-gray-300 dark:bg-gray-900 rounded-xl'>
+    <div className='my-6 w-[96%] min-w-[30rem]  mx-auto bg-gray-300 dark:bg-gray-900 rounded-xl'>
             {
                 posts?.map(post => (
                     <div key={post?._id} className="w-[95%] mx-auto rounded-xl">
@@ -152,7 +152,7 @@ function Post() {
                         </Link>
                         <div className='flex justify-between'>
                             {
-                                currentUser?._id !== user[0]?._id && (
+                                currentUser?._id !== user?._id && (
                                     <Button color='dark' onClick={() => handleFollow(user?._id, currentUser?._id, currentUser, setUser, user)}>
                                         {
                                             user?.followers?.includes(currentUser?._id) ? 
@@ -166,8 +166,8 @@ function Post() {
                         <div className="my-2">
                             <p className='text-sm md:px-2 w-[90%] text-slate-100'>{post?.desc}</p>
                         </div>
-                        <div className="w-full rounded-2xl shadow-2xl shadow-gray-700 overflow-hidden">
-                            <img className='w-full h-full object-contain' src={post.image} alt="" />
+                        <div className="w-full h-[50rem] md:h-[40rem] lg:h-[90rem] rounded-2xl shadow-2xl shadow-gray-700 overflow-hidden">
+                            <img className='w-[100%] h-full object-contain md:object-cover' src={post.image} alt="" />
                         </div>
                         <div className="mt-2">
                                     {

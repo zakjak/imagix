@@ -27,7 +27,7 @@ function Navbar() {
         // The signed-in user info.
         const user = result.user;
         try{
-            fetch('/api/auth/google', {
+            fetch('https://imagix-u57i.onrender.com/api/auth/google', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({

@@ -11,12 +11,9 @@ import { useLocation } from 'react-router-dom'
 
 function Home() {
   const [posts, setPosts] = useState([])
-  // const { inView, ref } = useInView({
-  //   triggerOnce: true
-  // })
 
 const getPosts = async () => {
-      const res = await fetch(`/api/post/getPost`)
+      const res = await fetch(`https://imagix-u57i.onrender.com/api/post/getPost`)
       const data = await res.json()
       
       if(res.ok){
@@ -27,40 +24,6 @@ const getPosts = async () => {
 useEffect(() => {
   getPosts()
 }, [])
-
-// const { 
-//   data, status, error, fetchNextPage, hasNextPage, isFetching
-// } = useInfiniteQuery({
-//   queryKey: ['posts'],
-//   queryFn: getPost,
-//   initialPageParam: 1,
-//   getNextPageParam: (lastPage, allPages) => {
-//     // console.log(allPageParam)
-//     // return allPages[0]?.posts.length + 1
-//     const nextPage = lastPage?.posts.length  ? allPages[0]?.posts.length + 1 : undefined;
-//     return nextPage;
-//   },
-// })
-
-
-
-// const content = data?.pages.map(posts => 
-//   posts?.posts?.map((post, i) => {
-//     if(posts?.posts.length === i + 1){
-//       return <Card  post={post} key={post._id} innerRef={ref}  />
-//     }else{
-//       return <Card key={post._id} post={post} />
-//     }
-// })
-// )
-
-
-  // useEffect(() => {
-  //   if(inView && hasNextPage){
-  //     fetchNextPage()
-  //   }
-  // }, [inView, hasNextPage, fetchNextPage])
-
 
   return (
     <div className="mb-10">
