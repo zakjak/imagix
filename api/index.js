@@ -10,12 +10,11 @@ import cookieParser from "cookie-parser";
 import bodyParser from 'body-parser'
 // import { createServer } from 'http'
 // import { Server } from 'socket.io'
-
+dotenv.config()
 const app = express()
 // export const httpServer = createServer(app)
 
 // Middleware
-dotenv.config()
 app.use(express.json())
 app.use(cors({
     origin: '*',
