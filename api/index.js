@@ -41,54 +41,15 @@ app.use('/api/comment', commentRouter)
 const PORT = process.env.PORT
 
 // CHAT LOGIC
-const io = new Server(httpServer, {
-    cors: {
-        origin: '*',
-        methods: ['GET', 'POST']
-    }
-})
+// const io = new Server(httpServer, {
+//     cors: {
+//         origin: '*',
+//         methods: ['GET', 'POST']
+//     }
+// })
 
-let onlineUsers = []
 
-const addNewUser = (userId, socketId) => {
-    !onlineUsers.some(user => user.userId === userId) && 
-    onlineUsers.push({userId, socketId})
-}
 
-const removeUser = (socketId) => {
-    onlineUsers.filter(user => user.socketId !== socketId)
-}
-
-const getUser = (userId) => {
-    return onlineUsers.find(user => user.userId === userId)
-}
-
-let live = ''
-
-io.on('connection', (socket) => {
-
-    socket.emit('otherUser', socket.id)
-
-    socket.on('userOnline', (data) => {
-        addNewUser(data?.liveUser, data.liveSocket)
-        // live =  data.liveSocket
-        // console.log(data)
-    })
-
-    socket.emit('liveUser', live)
-
-    socket.on('join', (data) => {
-        // const onlineUser = getUser(data.receiver)
-        // socket.join(onlineUser.)
-        // socket.join([data.sender, data.receiver])
-    })
-
-    socket.on('message', (data) => {
-        const onlineUser = getUser(data.userId)
-        // socket.join([data., data.receiver])
-        io.to().emit('sent_message', data)
-    })
-})
 
 httpServer.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`)

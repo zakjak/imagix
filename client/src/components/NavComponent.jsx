@@ -4,7 +4,7 @@ import Navbar from './Navbar'
 function NavComponent() {
 
   return (
-    <div>
+    <div className='w-full h-screen'>
         <Navbar />
         <Outlet />
     </div>

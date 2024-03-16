@@ -193,7 +193,7 @@ useEffect(() => {
                         'Following' : 'Follow'
                       }
                       </Button>
-                      <Button color="light" className="p-0" onClick={() => setOpenMessage(true)}><FaRegEnvelope /></Button>
+                      {/* <Button color="light" className="p-0" onClick={() => setOpenMessage(true)}><FaRegEnvelope /></Button> */}
                     </>
 
                   ): (
@@ -256,7 +256,7 @@ useEffect(() => {
               </Modal>
               <div className="mb-10">
              
-                    <div className='w-[80%] overflow-hidden mx-auto mt-5 grid grid-cols-2 md:gap-3 gap-2 md:grid-cols-3'>
+                    <div className='w-[98%] overflow-hidden mx-auto mt-5 grid grid-cols-2 md:gap-3 gap-2 md:grid-cols-3'>
                       {
                         posts && (
                           posts?.posts?.map(post => (

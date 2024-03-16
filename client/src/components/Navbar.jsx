@@ -63,7 +63,7 @@ function Navbar() {
     }
 
   return (
-    <nav className="z-50 h-16 w-full overflow-hidden bg-gray-200 dark:bg-[#0B0C0E] shadow-md dark:shadow-gray-900 flex items-center">
+    <nav className="h-16 z-50 sticky top-0 w-full bg-gray-200 dark:bg-[#0B0C0E] shadow-md dark:shadow-gray-900 flex items-center">
          <div className="w-[90%] mx-auto flex justify-between items-center">
             <div className="flex items-center flex-1">
                 <Link onClick={() => homePage()} to='/' className="text-xl">
