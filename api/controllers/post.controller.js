@@ -6,8 +6,8 @@ import { errorHandler } from "../utils/errorHandler.js"
 export const createPost = async (req, res, next) => {
     const { desc, image, userId } = req.body
 
-    if(req.user.id !== userId) {
-        return next(errorHandler(404, 'UnAthorized to create post'))
+    if(!userId || userId === undefined || userId === '') {
+        return next(errorHandler(404, 'UnAthorized to create post, Please login'))
     }
 
     try{

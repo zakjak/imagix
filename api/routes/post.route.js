@@ -4,7 +4,7 @@ import verifyUser from "../utils/verifyUser.js";
 
 const router = express.Router()
 
-router.post('/create', verifyUser, createPost)
+router.post('/create', createPost)
 router.get('/getPost', getPost)
 router.put('/likePost/:postId/:userId',likePost)
 
