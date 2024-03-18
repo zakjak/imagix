@@ -20,7 +20,7 @@ function SearchIterms() {
     const fetchUsers = async () => {
         if(searchTermUrl){
             const searchQuery = urlParams.toString()
-            const users = await fetch(`/api/user/getUser?${searchQuery}`)
+            const users = await fetch(`https://imagix-xwa1.onrender.com/api/user/getUser?${searchQuery}`)
             
             const data = await users.json()
 
@@ -31,7 +31,7 @@ function SearchIterms() {
     const fetchPosts = async () => {
         if(searchTermUrl){
             const searchQuery = urlParams.toString()
-            const posts = await fetch(`/api/post/getPost/?${searchQuery}`)
+            const posts = await fetch(`https://imagix-xwa1.onrender.com/api/post/getPost/?${searchQuery}`)
             
             const data = await posts.json()
             console.log(data)

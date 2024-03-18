@@ -11,7 +11,7 @@ function Home() {
   const [posts, setPosts] = useState([])
 
 const getPosts = async () => {
-  const { data } = await axios.get('http://localhost:3000/api/post/getPost')
+  const { data } = await axios.get('https://imagix-xwa1.onrender.com/api/post/getPost')
 
   if(data){
     setPosts(data?.posts)
@@ -23,7 +23,7 @@ useEffect(() => {
 }, [])
 
   return (
-    <div className="mb-10">
+    <div className="pb-10">
       <div className='w-[92%] mx-auto mt-5 grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-4'>
       {
         posts && (

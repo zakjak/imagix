@@ -42,7 +42,7 @@ function CreateModal({ user, setCreateModal, getPost }) {
 
     const handleSubmit = async (e) => {
         e.preventDefault()
-        const res = await fetch(`/api/post/create`, {
+        const res = await fetch(`https://imagix-xwa1.onrender.com/api/post/create`, {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({

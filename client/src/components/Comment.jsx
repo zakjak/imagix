@@ -4,6 +4,7 @@ import { HiOutlineDotsVertical } from "react-icons/hi";
 import { useEffect, useState } from "react";
 import { Avatar, Button, Dropdown, Modal, TextInput } from "flowbite-react";
 import moment from 'moment'
+import { Link } from "react-router-dom";
 
 function Comment({ setComments, comments, comment, currentUser, showLikeToast, setShowLikeToast, likeComment }) {
     const [user, setUser] = useState([])
@@ -13,7 +14,7 @@ function Comment({ setComments, comments, comment, currentUser, showLikeToast, s
 
     useEffect(() => {
         const fetchUser = async () => {
-            const res = await fetch(`http://localhost:3000/api/user/getUser?userId=${comment?.owner}`)
+            const res = await fetch(`https://imagix-xwa1.onrender.com/api/user/getUser?userId=${comment?.owner}`)
             const data = await res.json()
 
             if(res.ok){
@@ -24,7 +25,7 @@ function Comment({ setComments, comments, comment, currentUser, showLikeToast, s
     }, [comment])
 
     const handleDeleteComment = async (commentId) => {
-        const res = await fetch(`http://localhost:3000/api/comment/${commentId}/${user?._id}`, {
+        const res = await fetch(`https://imagix-xwa1.onrender.com/api/comment/${commentId}/${user?._id}`, {
             method: 'DELETE',
         })
         const data = await res.json()
@@ -37,7 +38,7 @@ function Comment({ setComments, comments, comment, currentUser, showLikeToast, s
 
     const handleEditComment = async (e) => {
         e.preventDefault()
-        const res = await fetch(`http://localhost:3000/api/comment/${comment?._id}/${user?._id}`, {
+        const res = await fetch(`https://imagix-xwa1.onrender.com/api/comment/${comment?._id}/${user?._id}`, {
             method: 'PUT',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({comment: editComment})
@@ -64,12 +65,12 @@ function Comment({ setComments, comments, comment, currentUser, showLikeToast, s
     <div key={comment._id} className="mt-2">
         <div className="flex justify-between items-center">
             <div className="flex items-start gap-2">
-                <div className="flex gap-2">
+                <Link to={`/profile/${user?._id}`} className="flex gap-2">
                     <Avatar img={user?.picture} rounded className="flex justify-end" />
-                </div>
+                </Link>
                 <div className="">
                     <div className="flex items-center gap-2">
-                        <p className="font-semibold text-sm">{user?.username}</p>
+                        <Link to={`/profile/${user?._id}`} className="font-semibold text-sm">{user?.username}</Link>
                         <div className="w-[.6px] h-[1rem] bg-white" />
                         <p className="text-sm text-gray-500 dark:text-gray-400">{moment(comment?.createdAt).fromNow()}</p>
                     </div>
@@ -80,7 +81,7 @@ function Comment({ setComments, comments, comment, currentUser, showLikeToast, s
                     <div className="text-xl flex items-center gap-1">
                         <FaHeart 
                             title='like'
-                            className={`heart text-sm cursor-pointer drop-shadow-2x ${comment.likes.includes(currentUser._id) ? 'text-red-900' : 'text-white'}`} 
+                            className={`heart text-sm cursor-pointer drop-shadow-2x ${comment.likes.includes(currentUser?._id) ? 'text-red-900' : 'text-white'}`} 
                             onClick={() => likeComment(comment._id)} />
                         <span 
                             className='text-sm'
@@ -94,7 +95,7 @@ function Comment({ setComments, comments, comment, currentUser, showLikeToast, s
             </div>
             <div className="">
                 {
-                    currentUser._id === comment?.owner && (
+                    currentUser?._id === comment?.owner && (
                         <Dropdown label='' dismissOnClick={false} renderTrigger={() => <div className="bg-slate-600 p-2 cursor-pointer rounded-full hover:bg-slate-700"><HiOutlineDotsVertical /></div>}>
                             <Dropdown.Item onClick={() => setOpenEditModal(true)}>
                                 Edit

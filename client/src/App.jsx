@@ -8,7 +8,7 @@ import Navbar from './components/Navbar'
 function App() {
 
   return (
-    <>
+    <div className='h-screen'>
     <Navbar />
     <Routes>
       <Route path='/' element={<Home />} />
@@ -16,7 +16,7 @@ function App() {
       <Route path='/post/:id' element={<Post />} />
       <Route path='/search' element={<SearchIterms />} />
     </Routes>
-    </>
+    </div>
   )
 }
 

@@ -22,7 +22,7 @@ function Card({ post, innerRef, setPosts, posts,...props }) {
         return;
     }
     try{
-      const res = await fetch(`http://localhost:3000/api/user/getUser?userId=${post?.owner}`)
+      const res = await fetch(`https://imagix-xwa1.onrender.com/api/user/getUser?userId=${post?.owner}`)
       const data = await res.json()
 
       if(res.ok){
@@ -43,7 +43,7 @@ useEffect(() => {
 const handlePostLikes = async (postId) => {
   try{
       if(currentUser){
-          const res = await fetch(`http://localhost:3000/api/post/likePost/${postId}/${currentUser?._id}`, {
+          const res = await fetch(`https://imagix-xwa1.onrender.com/api/post/likePost/${postId}/${currentUser?._id}`, {
               method: 'PUT',
           })
 
@@ -113,7 +113,7 @@ const open = Boolean(openPopover)
               <Avatar img={user?.picture} alt={`Profile of ${user?.username}`} size='sm' rounded/>
               <span className='text-xs dark:text-slate-300'>{user?.username}</span>
           </Link>
-        <div className="">
+        <div className="flex items-center justify-center">
                 <div className="flex items-center gap-1">
                     <span 
                         className={`cursor-pointer ${post?.likes.includes(currentUser?._id) ? 'text-red-900' : 'text-gray-500'}`} 
