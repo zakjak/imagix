@@ -124,12 +124,13 @@ function Post() {
       }
 
       const profilePage = (postOwner) => {
-        window.history.pushState(`https://imagix-u57i.onrender.com/profile/${postOwner}`)
+        window.history.pushState(`/profile/${postOwner}`)
         window.location.reload()
       }
   
   return (
-    <div className='my-6 w-[96%] min-w-[30rem]  mx-auto bg-gray-300 dark:bg-gray-900 rounded-xl'>
+    <div className="w-full min-h-screen py-6">
+    <div className=' w-[96%] lg:w-[60%] shadow-md md:w-[80%]  mx-auto bg-gray-300 dark:bg-gray-900 rounded-xl'>
             {
                 posts?.map(post => (
                     <div key={post?._id} className="w-[95%] mx-auto rounded-xl">
@@ -163,11 +164,11 @@ function Post() {
                             }
                             </div>
                         </div>
-                        <div className="my-2">
-                            <p className='text-sm md:px-2 w-[90%] text-slate-100'>{post?.desc}</p>
+                        <div className="m-2">
+                            <p className='text-sm md:px-2 w-[90%]'>{post?.desc}</p>
                         </div>
-                        <div className="w-full h-[50rem] md:h-[40rem] lg:h-[90rem] rounded-2xl shadow-2xl shadow-gray-700 overflow-hidden">
-                            <img className='w-[100%] h-full object-contain md:object-cover' src={post.image} alt="" />
+                        <div className="rounded-2xl w-full h-[40em] md:h-[40em] lg:h-[45em] shadow-gray-700 overflow-hidden">
+                            <img className='h-full w-full object-cover' src={post.image} alt="" />
                         </div>
                         <div className="mt-2">
                                     {
@@ -222,6 +223,7 @@ function Post() {
                     </div>
                 ))
             }
+    </div>
     </div>
   )
 }

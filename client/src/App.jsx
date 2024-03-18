@@ -8,7 +8,7 @@ import Navbar from './components/Navbar'
 function App() {
 
   return (
-    <div className='h-screen'>
+    <div className='h-screen w-full'>
     <Navbar />
     <Routes>
       <Route path='/' element={<Home />} />
