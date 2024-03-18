@@ -8,7 +8,7 @@ import postRouter from './routes/post.route.js'
 import commentRouter from './routes/comment.router.js'
 import cookieParser from "cookie-parser";
 import bodyParser from 'body-parser'
-import path from 'path'
+
 // import { createServer } from 'http'
 // import { Server } from 'socket.io'
 dotenv.config()
@@ -32,7 +32,6 @@ app.use(cookieParser())
 mongoose.connect(process.env.MONGO_URL)
 .then(console.log('Database Connected'))
 
-const __dirname = path.resolve()
 
 
 app.use('/api/auth', authRouter)
@@ -40,10 +39,6 @@ app.use('/api/user', userRouter)
 app.use('/api/post', postRouter)
 app.use('/api/comment', commentRouter)
 
-app.use(express.static(path.join(__dirname, '/client/dist')))
-app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'client', 'dist', 'index.html'))
-})
 // CHAT LOGIC
 // const io = new Server(httpServer, {
 //     cors: {
