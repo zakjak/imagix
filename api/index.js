@@ -37,8 +37,6 @@ app.use('/api/user', userRouter)
 app.use('/api/post', postRouter)
 app.use('/api/comment', commentRouter)
 
-const PORT = process.env.PORT
-
 // CHAT LOGIC
 // const io = new Server(httpServer, {
 //     cors: {
@@ -50,8 +48,8 @@ const PORT = process.env.PORT
 
 
 
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`)
+app.listen(3000, () => {
+    console.log(`Server running on port 3000`)
 })
 
 app.use((err, req, res, next) => {
