@@ -4,10 +4,10 @@ import { followUser, getFollowers, getUser, updateUser } from '../controllers/us
 
 const router = express.Router()
 
-router.put('/update/:userId', verifyUser, updateUser)
+router.put('/update/:userId', updateUser)
 router.get('/getUser', getUser)
 router.get('/getFollowers', getFollowers)
-router.put('/getUser/:followerId/:userId', verifyUser, followUser)
+router.put('/getUser/:followerId/:userId', followUser)
 
 
 export default router

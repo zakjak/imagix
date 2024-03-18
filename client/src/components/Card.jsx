@@ -11,6 +11,7 @@ function Card({ post, innerRef, setPosts, posts,...props }) {
   const [user, setUser] = useState({})
   const { currentUser } = useSelector(state => state.user)
   const [openPopover, setOpenPopover] = useState(null)
+  const [howLikeToast, setShowLikeToast] = useState(false)
 
   const location = useLocation()
 
@@ -21,7 +22,7 @@ function Card({ post, innerRef, setPosts, posts,...props }) {
         return;
     }
     try{
-      const res = await fetch(`https://imagix-u57i.onrender.com/api/user/getUser?userId=${post?.owner}`)
+      const res = await fetch(`http://localhost:3000/api/user/getUser?userId=${post?.owner}`)
       const data = await res.json()
 
       if(res.ok){
@@ -38,10 +39,11 @@ useEffect(() => {
   fetchUsers()
 }, [])
 
+
 const handlePostLikes = async (postId) => {
   try{
       if(currentUser){
-          const res = await fetch(`https://imagix-u57i.onrender.com/api/post/likePost/${postId}/${currentUser?._id}`, {
+          const res = await fetch(`http://localhost:3000/api/post/likePost/${postId}/${currentUser?._id}`, {
               method: 'PUT',
           })
 

@@ -6,6 +6,6 @@ const router = express.Router()
 
 router.post('/create', verifyUser, createPost)
 router.get('/getPost', getPost)
-router.put('/likePost/:postId/:userId', verifyUser, likePost)
+router.put('/likePost/:postId/:userId',likePost)
 
 export default router

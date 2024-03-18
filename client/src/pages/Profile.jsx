@@ -16,6 +16,7 @@ import { app } from "../firebase";
 import Message from "../components/Message";
 import FollowModal from "../components/FollowModal";
 import { io } from 'socket.io-client'
+import axios from 'axios'
 
 function Profile() {
   const [openModal, setOpenModal] = useState(false)
@@ -47,10 +48,9 @@ function Profile() {
   
   const getUser = async () =>{
     try{
-      const res = await fetch(`https://imagix-u57i.onrender.com/api/user/getUser?userId=${userId.id}`)
-      
-      if(res.ok){
-        const data = await res.json()
+      const {data} = await axios.get(`http://localhost:3000/api/user/getUser?userId=${userId.id}`)
+
+      if(data){
         setUser(data)
       }
       
@@ -69,10 +69,9 @@ function Profile() {
     const queryString = followId.join(',')
     
     try{
-        const res = await fetch(`https://imagix-u57i.onrender.com/api/user/getFollowers?followersId=${queryString}`)
-        const data = await res.json()
+        const { data } = await axios.get(`https://imagix-u57i.onrender.com/api/user/getFollowers?followersId=${queryString}`)
 
-        if(res.ok){
+        if(data){
           setFollowers(data)
         }
       
@@ -117,7 +116,7 @@ useEffect(() => {
     }, () => {
       getDownloadURL(uploadTask.snapshot.ref).then((downloadUrl) => {
         console.log(downloadUrl)
-        fetch(`https://imagix-u57i.onrender.com/api/user/update/${currentUser._id}`, {
+        fetch(`http://localhost:3000/api/user/update/${currentUser._id}`, {
           method: 'PUT',
           headers: {'Content-Type': 'application/json'},
           body: JSON.stringify({

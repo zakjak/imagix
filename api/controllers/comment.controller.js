@@ -4,7 +4,11 @@ import { errorHandler } from "../utils/errorHandler.js"
 export const createComment = async (req, res, next) => {
     const { postId, comment, owner } = req.body
 
-    if(!req.user.id){
+    // if(!req.user.id){
+    //     return next(errorHandler(404, 'Unauthorized'))
+    // }
+
+    if(!owner || owner === '' || owner === undefined){
         return next(errorHandler(404, 'Unauthorized'))
     }
 
@@ -36,9 +40,9 @@ export const getComments = async (req, res, next) => {
 export const likeComment = async(req, res, next) => {
     const { commentId, userId } = req.params
 
-    if(req.user.id !== userId){
-        return next(errorHandler(403, 'Login to comment'))
-    }
+    // if(req.user.id !== userId){
+    //     return next(errorHandler(403, 'Login to comment'))
+    // }
 
     if(!commentId || !userId || commentId === '' || userId === ''){
         return next(errorHandler(403, "Fields can't be empty"))
@@ -69,12 +73,12 @@ export const deleteComment = async (req, res, next) => {
     const { userId, commentId } = req.params
 
 
-    if(userId !== req.user.id){
+    if(!userId || userId === '' || userId === undefined){
         return next(errorHandler(403, 'Unauthorized to delete'))
     }
 
     try{
-        const deletedComment = await Comment.findByIdAndDelete(commentId )
+        const deletedComment = await Comment.findByIdAndDelete(commentId)
 
         res.status(200).json(deletedComment)
     }catch(err){
@@ -86,8 +90,9 @@ export const editComment = async (req, res, next) => {
     const { commentId, userId } = req.params
     const { comment } = req.body
 
-    if(userId !== req.user.id){
-        next(errorHandler(404, 'Unauthorized to edit comment'))
+    if(!userId || userId === '' || 
+    userId === undefined){
+        next(errorHandler(404, 'Please login to be able to comment on post!!!'))
     }
 
     try{

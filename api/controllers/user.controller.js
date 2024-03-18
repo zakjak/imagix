@@ -8,9 +8,8 @@ export const signOut = (req, res, next) => {
 export const updateUser = async (req, res, next) => {
     const { userId } = req.params
     const { banner, bio } = req.body
-    
 
-    if(userId !== req.user.id){
+    if(!userId || userId === '' || userId === undefined){
         return next(errorHandler(403, 'Unauthorized to update user'))
     }
 
@@ -81,12 +80,6 @@ export const getFollowers = async (req, res, next)=> {
 
 export const followUser = async(req, res, next) =>{
     const { followerId, userId } = req.params
-
-    if(followerId === '' && !followerId){}
-
-    if(!req.user.id){
-        return next(errorHandler(404, 'Sign in to follower user'))
-    }
 
     if(!followerId || !userId || 
         followerId === undefined || 

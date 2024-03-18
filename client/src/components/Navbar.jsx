@@ -1,5 +1,5 @@
-import { Avatar, Button, Dropdown} from "flowbite-react"
-import { GoogleAuthProvider, getAuth, signInWithPopup } from 'firebase/auth'
+import { Avatar, Button, Dropdown } from "flowbite-react"
+import { GoogleAuthProvider, getAuth, signInWithPopup, signInWithRedirect } from 'firebase/auth'
 import { app } from "../firebase"
 import { useDispatch, useSelector } from "react-redux" 
 import { toggleTheme } from '../redux/theme/themeSlice'
@@ -16,7 +16,7 @@ function Navbar() {
 
     const navigate = useNavigate()
 
-    const handleSignIn = () => {
+    const handleSignIn = async() => {
         const auth = getAuth(app)
         const provider = new GoogleAuthProvider()
         signInWithPopup(auth, provider)
@@ -27,7 +27,7 @@ function Navbar() {
         // The signed-in user info.
         const user = result.user;
         try{
-            fetch('https://imagix-u57i.onrender.com/api/auth/google', {
+            fetch('http://localhost:3000/api/auth/google', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({

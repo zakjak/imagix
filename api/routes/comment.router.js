@@ -4,10 +4,10 @@ import { createComment, deleteComment, editComment, getComments, likeComment } f
 
 const router = express.Router()
 
-router.post('/createComment', verifyUser, createComment)
+router.post('/createComment', createComment)
 router.get('/getComment', getComments)
-router.put('/likeComment/:commentId/:userId', verifyUser, likeComment)
-router.delete('/:commentId/:userId', verifyUser, deleteComment)
-router.put('/:commentId/:userId', verifyUser, editComment)
+router.put('/likeComment/:commentId/:userId', likeComment)
+router.delete('/:commentId/:userId', deleteComment)
+router.put('/:commentId/:userId', editComment)
 
 export default router

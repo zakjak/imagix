@@ -5,20 +5,17 @@ import Card from '../components/Card'
 import { Spinner } from 'flowbite-react'
 import { Masonry } from '@mui/lab'
 import { useLocation } from 'react-router-dom'
-
-
-
+import axios from 'axios'
 
 function Home() {
   const [posts, setPosts] = useState([])
 
 const getPosts = async () => {
-      const res = await fetch(`https://imagix-u57i.onrender.com/api/post/getPost`)
-      const data = await res.json()
-      
-      if(res.ok){
-        setPosts(data?.posts)
-      }
+  const { data } = await axios.get('http://localhost:3000/api/post/getPost')
+
+  if(data){
+    setPosts(data?.posts)
+  }
 }
 
 useEffect(() => {

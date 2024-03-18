@@ -17,7 +17,7 @@ const FollowModal = ({ openFollower, setOpenFollower, followers, follow, setFoll
     const handleFollow = async (userId, currentUserId, currentUser, setUser, follower) => {
         try{
             if(currentUser && userId && currentUser){
-                const res = await fetch(`/api/user/getUser/${userId}/${currentUserId}`, {
+                const res = await fetch(`http://localhost:3000/api/user/getUser/${userId}/${currentUserId}`, {
                     method: 'PUT',
                     headers: {'Content-Type': 'application/json'},
                 })
@@ -25,7 +25,7 @@ const FollowModal = ({ openFollower, setOpenFollower, followers, follow, setFoll
                 if(res.ok){
                     const data = await res.json()
                     setFollowers(followers.map(follower =>
-                        follower._id === userId ? {
+                        follower?._id === userId ? {
                             ...follower,
                             followers: data.followers,
                             following: data.following
@@ -58,10 +58,10 @@ const FollowModal = ({ openFollower, setOpenFollower, followers, follow, setFoll
                                         <span className='font-semibold'>{follower?.username}</span>
                                     </div>
                                     {
-                                        currentUser._id !== follower?._id && (
+                                        currentUser?._id !== follower?._id && (
                                             <Button onClick={() => handleFollow(follower?._id, currentUser?._id, currentUser, setFollowers, follower)} color='dark'>
                                                 {
-                                                    follower?.followers?.includes(currentUser._id) ? 
+                                                    follower?.followers?.includes(currentUser?._id) ? 
                                                     'Following' : 'Follow'
                                                 }
                                             </Button>

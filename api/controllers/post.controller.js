@@ -54,12 +54,12 @@ export const getPost = async(req, res, next) => {
 export const likePost = async(req, res, next) => {
     const { postId, userId } = req.params
 
-    if(req.user.id !== userId){
-        return next(errorHandler(403, 'Login to like post'))
-    }
+    // if(req.user.id !== userId){
+    //     return next(errorHandler(403, 'Login to like post'))
+    // }
 
     if(!postId || !userId || postId === '' || userId === ''){
-        return next(errorHandler(403, "Fields can't be empty"))
+        return next(errorHandler(403, "Unauthorized to like post"))
     }
 
     try{
