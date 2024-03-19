@@ -73,7 +73,7 @@ function Navbar() {
                 <Search />
             </div>
             <div className="flex gap-3">
-                    <span className="flex items-center cursor-pointer focus:border" onClick={() => dispatch(toggleTheme())}>
+                    <span className="hidden md:flex items-center cursor-pointer focus:border" onClick={() => dispatch(toggleTheme())}>
                         {theme === 'light' ? <FaSun /> : <FaMoon /> }
                     </span>
                     {
@@ -91,6 +91,15 @@ function Navbar() {
                                 <Link to={`/profile/${currentUser._id}`}>
                                     <Dropdown.Item>Profile</Dropdown.Item>
                                 </Link>
+                                <Dropdown.Item className="flex md:hidden items-center cursor-pointer focus:border" onClick={() => dispatch(toggleTheme())}>
+                                    {theme === 'light' ? 
+                                    <Button color="none">
+                                        Light mode <FaSun className="text-xs ml-1" />
+                                    </Button> : 
+                                    <Button color="none">
+                                        Dark mode <FaMoon className="text-xs ml-1" />
+                                    </Button> }
+                                </Dropdown.Item>
                                 <Dropdown.Item onClick={handleSignOut}><IoLogOutOutline /> <span>Sign out</span></Dropdown.Item>
                             </Dropdown>
                         ): (

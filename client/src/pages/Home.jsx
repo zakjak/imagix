@@ -24,7 +24,7 @@ useEffect(() => {
 
   return (
     <div className="pb-10">
-      <div className='w-[92%] mx-auto mt-5 grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-4'>
+      <div className='w-[92%] mx-auto mt-5 grid md:grid-cols-2 gap-3 lg:grid-cols-4'>
       {
         posts && (
           posts.map(post => (
