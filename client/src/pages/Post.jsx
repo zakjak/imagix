@@ -130,7 +130,7 @@ function Post() {
   
   return (
     <div className="w-full min-h-screen py-6">
-    <div className=' w-[96%] lg:w-[60%] shadow-md md:w-[80%]  mx-auto bg-gray-300 dark:bg-gray-900 rounded-xl'>
+    <div className=' w-[96%] lg:w-[80%] shadow-md md:w-[80%]  mx-auto bg-gray-300 dark:bg-gray-900 rounded-xl'>
             {
                 posts?.map(post => (
                     <div key={post?._id} className="w-[95%] mx-auto rounded-xl">

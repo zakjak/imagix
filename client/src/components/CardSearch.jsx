@@ -66,9 +66,9 @@ const CardSearch = ({ post, setPosts, posts }) => {
     
   return (
     <div>
-        <Link to={`/post/${post?._id}`} className="">
-            <div className="rounded-md overflow-hidden w-full h-[13rem]">
-                <img className='w-full h-[120%] object-cover' src={post.image} alt="" />
+        <Link to={`/post/${post?._id}`}>
+            <div className="rounded-lg shrink-0 overflow-hidden w-full h-[25rem]">
+                <img className='w-full h-full object-cover' src={post.image} alt="" />
             </div>
         </Link>
         <div className="flex pt-2 justify-between items-center">

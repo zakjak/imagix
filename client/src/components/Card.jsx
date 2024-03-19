@@ -94,8 +94,8 @@ const open = Boolean(openPopover)
         to={`/post/${post._id}`} 
         className='rounded-lg overflow-hidden shadow-xl 
         dark:shadow-gray-900'>
-          <div className="w-full h-[15rem] md:h-[18rem] rounded-md overflow-hidden">
-            <img className='w-full h-full object-cover' 
+          <div  className="w-full h-[30rem] md:h-[18rem] rounded-md overflow-hidden">
+            <img className='h-full w-full object-cover' 
               src={post.image} alt={`${post?.desc}`} />
           </div>
       </Link>

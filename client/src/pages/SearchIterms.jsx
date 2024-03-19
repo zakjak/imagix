@@ -60,10 +60,10 @@ function SearchIterms() {
             )
         }
         <div className="w-[80%] mx-auto mt-6">
-            <h1 className='text-xl'>Post found</h1>
+            <h1 className='text-xl'>{posts.length > 0 ? 'Post found' : 'Post not found'}</h1>
             {
                 posts?.length > 0 && (
-                    <div className='grid grid-cols-4 gap-4 mt-4 w-full'>
+                    <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2'>
                         {posts?.map(post => (
                             <CardSearch 
                                 key={post._id} 
