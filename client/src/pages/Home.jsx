@@ -11,7 +11,7 @@ function Home() {
   const [posts, setPosts] = useState([])
 
 const getPosts = async () => {
-  const { data } = await axios.get('https://imagix-xwa1.onrender.com/api/post/getPost')
+  const { data } = await axios.get('https://imagix-delta.vercel.app/api/post/getPost')
 
   if(data){
     setPosts(data?.posts)

@@ -26,7 +26,7 @@ function Post() {
     }, [postId, posts[0]?.owner])
     
     const getPost = async () => {
-        const res = await fetch(`https://imagix-xwa1.onrender.com/api/post/getPost?postId=${postId?.id}`)
+        const res = await fetch(`https://imagix-delta.vercel.app/api/post/getPost?postId=${postId?.id}`)
         const data = await res.json()
         // console.log(data.posts)
     
@@ -40,7 +40,7 @@ function Post() {
             return;
         }
         try{
-          const res = await fetch(`https://imagix-xwa1.onrender.com/api/user/getUser?userId=${posts[0]?.owner}`)
+          const res = await fetch(`https://imagix-delta.vercel.app/api/user/getUser?userId=${posts[0]?.owner}`)
           const data = await res.json()
     
           if(res.ok){
@@ -55,7 +55,7 @@ function Post() {
 
       const getComment = async () =>{
         try{
-          const res = await fetch(`https://imagix-xwa1.onrender.com/api/comment/getComment?postId=${posts[0]?._id}`)
+          const res = await fetch(`https://imagix-delta.vercel.app/api/comment/getComment?postId=${posts[0]?._id}`)
     
           if(res.ok){
             const data = await res.json()
@@ -71,7 +71,7 @@ function Post() {
         e.preventDefault()
         try{
             if(currentUser){
-                const res = await fetch('https://imagix-xwa1.onrender.com/api/comment/createComment', {
+                const res = await fetch('https://imagix-delta.vercel.app/api/comment/createComment', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({
@@ -98,7 +98,7 @@ function Post() {
       const likeComment = async (commentId) => {
         try{
             if(currentUser){
-                const res = await fetch(`https://imagix-xwa1.onrender.com/api/comment/likeComment/${commentId}/${currentUser?._id}`, {
+                const res = await fetch(`https://imagix-delta.vercel.app/api/comment/likeComment/${commentId}/${currentUser?._id}`, {
                     method: 'PUT',
                 })
 

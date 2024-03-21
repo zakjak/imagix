@@ -48,7 +48,7 @@ function Profile() {
   
   const getUser = async () =>{
     try{
-      const {data} = await axios.get(`https://imagix-xwa1.onrender.com/api/user/getUser?userId=${userId.id}`)
+      const {data} = await axios.get(`https://imagix-delta.vercel.app/api/user/getUser?userId=${userId.id}`)
 
       if(data){
         setUser(data)
@@ -69,7 +69,7 @@ function Profile() {
     const queryString = followId.join(',')
     
     try{
-        const { data } = await axios.get(`https://imagix-xwa1.onrender.com/api/user/getFollowers?followersId=${queryString}`)
+        const { data } = await axios.get(`https://imagix-delta.vercel.app/api/user/getFollowers?followersId=${queryString}`)
 
         if(data){
           setFollowers(data)
@@ -82,7 +82,7 @@ function Profile() {
 
 
   const getPosts = async () => {
-      const res = await fetch(`https://imagix-xwa1.onrender.com/api/post/getPost?ownerId=${userId.id}`)
+      const res = await fetch(`https://imagix-delta.vercel.app/api/post/getPost?ownerId=${userId.id}`)
       const data = await res.json()
       
       if(res.ok){
@@ -116,7 +116,7 @@ useEffect(() => {
     }, () => {
       getDownloadURL(uploadTask.snapshot.ref).then((downloadUrl) => {
         console.log(downloadUrl)
-        fetch(`https://imagix-xwa1.onrender.com/api/user/update/${currentUser._id}`, {
+        fetch(`https://imagix-delta.vercel.app/api/user/update/${currentUser._id}`, {
           method: 'PUT',
           headers: {'Content-Type': 'application/json'},
           body: JSON.stringify({

@@ -15,7 +15,7 @@ export const numberManipulate = (num) => {
 export const handleFollow = async (userId, currentUserId, currentUser, setUser, user) => {
     try{
         if(currentUser && userId && currentUser){
-            const res = await fetch(`https://imagix-xwa1.onrender.com/api/user/getUser/${userId}/${currentUserId}`, {
+            const res = await fetch(`https://imagix-delta.vercel.app/api/user/getUser/${userId}/${currentUserId}`, {
                 method: 'PUT',
                 headers: {'Content-Type': 'application/json'},
             })

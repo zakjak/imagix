@@ -22,7 +22,7 @@ function Card({ post, innerRef, setPosts, posts,...props }) {
         return;
     }
     try{
-      const res = await fetch(`https://imagix-xwa1.onrender.com/api/user/getUser?userId=${post?.owner}`)
+      const res = await fetch(`https://imagix-delta.vercel.app/api/user/getUser?userId=${post?.owner}`)
       const data = await res.json()
 
       if(res.ok){
@@ -43,7 +43,7 @@ useEffect(() => {
 const handlePostLikes = async (postId) => {
   try{
       if(currentUser){
-          const res = await fetch(`https://imagix-xwa1.onrender.com/api/post/likePost/${postId}/${currentUser?._id}`, {
+          const res = await fetch(`https://imagix-delta.vercel.app/api/post/likePost/${postId}/${currentUser?._id}`, {
               method: 'PUT',
           })
 

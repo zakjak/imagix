@@ -17,7 +17,7 @@ const FollowModal = ({ openFollower, setOpenFollower, followers, follow, setFoll
     const handleFollow = async (userId, currentUserId, currentUser, setUser, follower) => {
         try{
             if(currentUser && userId && currentUser){
-                const res = await fetch(`http://localhost:3000/api/user/getUser/${userId}/${currentUserId}`, {
+                const res = await fetch(`https://imagix-delta.vercel.app/api/user/getUser/${userId}/${currentUserId}`, {
                     method: 'PUT',
                     headers: {'Content-Type': 'application/json'},
                 })
