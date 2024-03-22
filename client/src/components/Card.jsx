@@ -12,6 +12,8 @@ function Card({ post, innerRef, setPosts, posts,...props }) {
   const { currentUser } = useSelector(state => state.user)
   const [openPopover, setOpenPopover] = useState(null)
   const [howLikeToast, setShowLikeToast] = useState(false)
+  const [isMouseOver, setIsMouseOver] = useState(false)
+
 
   const location = useLocation()
 
@@ -78,6 +80,14 @@ const handlePopoverClose = (e) => {
 
 const open = Boolean(openPopover)
 
+const onMouseOver = () => {
+  setIsMouseOver(true)
+}
+
+const onMouseOut = () => {
+  setIsMouseOver(false)
+}
+
   return (
     <>
     <motion.div 
@@ -87,18 +97,46 @@ const open = Boolean(openPopover)
       transition={{ delay: 0.1 }}
       // className='min-w-[20rem]'
     >
-      <Link 
-        ref={innerRef} 
-        {...props} 
-        key={post._id} 
-        to={`/post/${post._id}`} 
+      <div  
+        onMouseOver={onMouseOver}
+        onMouseOut={onMouseOut}
         className='rounded-lg overflow-hidden shadow-xl 
         dark:shadow-gray-900'>
-          <div  className="w-full h-[30rem] md:h-[18rem] rounded-md overflow-hidden">
-            <img className='h-full w-full object-cover' 
-              src={post.image} alt={`${post?.desc}`} />
+          <div  className="w-full relative h-[30rem] md:h-[18rem] rounded-md overflow-hidden">
+            <Link key={post._id} 
+            ref={innerRef} 
+            {...props}
+              to={`/post/${post._id}`} 
+            >
+                <img className='h-full w-full z-10 object-cover line-clamp-1' 
+                  src={post.image} alt={`${post?.desc}`} />
+            </Link>
+              {
+              location.pathname.includes('profile') && isMouseOver && (
+                <div className='absolute bottom-0 p-4 h-14 bg-gradient-to-t from-zinc-700 to-transparent bg- flex justify-between w-full'>
+                  <span className='text-sm line-clamp-1'>{post?.desc}</span>
+                  {/* <div className="flex items-center justify-center">
+                <div className="flex items-center gap-1">
+                    <span 
+                        className={`cursor-pointer ${post?.likes.includes(currentUser?._id) ? 'text-red-900' : 'text-gray-400'}`} 
+                        onClick={() => handlePostLikes(post?._id)}><FaHeart /></span>
+                    <span>
+                    <span 
+                            className='text-sm'
+                        >
+                            {`${post?.numberOfLikes > 0 ? 
+                                numberManipulate(post?.numberOfLikes) === 1 ? 
+                                `${numberManipulate(post?.numberOfLikes)} ` : 
+                                `${numberManipulate(post?.numberOfLikes)}` : ''}`}
+                        </span>
+                    </span>
+                </div>
+            </div> */}
+                </div>
+              )
+            }
           </div>
-      </Link>
+      </div>
       {
         !location.pathname.includes('profile') && (
       <div className="flex justify-between px-1 mt-2">

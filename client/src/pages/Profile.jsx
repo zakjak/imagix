@@ -30,7 +30,7 @@ function Profile() {
   const [openFollowing, setOpenFollowing] = useState(false)
   const [follow, setFollow] = useState('')
   const [followers, setFollowers] = useState([])
-
+  
   // const socket = io('http://localhost:3000')
 
   const { inView, ref: refView } = useInView()
@@ -164,6 +164,8 @@ useEffect(() => {
 //       ret
 //     }
 // }, [socket, user?._id])
+
+  
 
   return (
     <div className="w-full min-h-screen flex-wrap pb-4">
