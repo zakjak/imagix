@@ -129,7 +129,7 @@ function Post() {
       }
 
       const deletePost = async (postId) => {
-        const res = await fetch(`http://localhost:3000/api/post/deletePost/${postId}/${currentUser?._id}`, {
+        const res = await fetch(`https://imagix-delta.vercel.app/api/post/deletePost/${postId}/${currentUser?._id}`, {
             method: 'DELETE',
         })
         const data = await res.json()

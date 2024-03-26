@@ -110,7 +110,7 @@ const onMouseOut = () => {
 }
 
 const deletePost = async (postId) => {
-  const res = await fetch(`http://localhost:3000/api/post/deletePost/${postId}/${currentUser?._id}`, {
+  const res = await fetch(`https://imagix-delta.vercel.app/api/post/deletePost/${postId}/${currentUser?._id}`, {
       method: 'DELETE',
   })
   const data = await res.json()
@@ -168,10 +168,14 @@ const deletePost = async (postId) => {
                      </span>
                  </div>
                 </div>
+                {
+                  currentUser?._id === post?.owner && (
                 <div onClick={() => setOpenDeleteModal(true)} className='bg-zinc-600 absolute top-4 right-4 
                   hover:bg-zinc-800 p-1 rounded-full cursor-pointer'>
                   <MdDeleteOutline />
                 </div>
+                  )
+                }
                 <Modal show={openDeleteModal} onClose={() => setOpenDeleteModal(false)} popup>
                   <Modal.Body>
                     <div className='flex flex-col gap-2 items-center justify-center'>
