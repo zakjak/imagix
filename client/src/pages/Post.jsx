@@ -1,4 +1,4 @@
-import { Avatar, Button } from 'flowbite-react'
+import { Avatar, Button, Modal } from 'flowbite-react'
 import React, { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { FaPlay } from "react-icons/fa";
@@ -7,6 +7,9 @@ import { Toast } from 'flowbite-react';
 import { handleFollow, numberManipulate } from '../components/Common';
 import Comment from '../components/Comment';
 import moment from 'moment';
+import { useNavigate } from 'react-router-dom'
+import { AiOutlineExclamationCircle } from "react-icons/ai";
+import { MdDeleteOutline } from 'react-icons/md';
 
 function Post() {
     const { currentUser } = useSelector(state => state.user)
@@ -16,8 +19,10 @@ function Post() {
     const [comment, setComment] = useState('')
     const [showLikeToast, setShowLikeToast] = useState(false)
     const [showCommentToast, setShowCommentToast] = useState(false)
+    const [openModal, setOpenModal] = useState(false)
 
     const postId = useParams()
+    const navigate = useNavigate()
 
     useEffect(() => {
         getPost()
@@ -123,6 +128,18 @@ function Post() {
         }
       }
 
+      const deletePost = async (postId) => {
+        const res = await fetch(`http://localhost:3000/api/post/deletePost/${postId}/${currentUser?._id}`, {
+            method: 'DELETE',
+        })
+        const data = await res.json()
+
+        if(res.ok){
+            posts.filter(post => post?._id !== data?._id)
+            navigate('/')
+        }
+      }
+
       const profilePage = (postOwner) => {
         window.history.pushState(`/profile/${postOwner}`)
         window.location.reload()
@@ -153,13 +170,31 @@ function Post() {
                         </Link>
                         <div className='flex justify-between'>
                             {
-                                currentUser?._id !== user?._id && (
+                                currentUser?._id !== user?._id ? (
                                     <Button color='dark' onClick={() => handleFollow(user?._id, currentUser?._id, currentUser, setUser, user)}>
                                         {
                                             user?.followers?.includes(currentUser?._id) ? 
                                             'Following' : 'Follow'
                                         }
                                     </Button>
+                                ) : (
+                                    <>
+                                        <Button color='dark' className='rounded-full w-10 h-10' size={10} onClick={() => setOpenModal(true)}><MdDeleteOutline /></Button>
+                                        <Modal show={openModal} onClose={() => setOpenModal(false)}>
+                                            <Modal.Body>
+                                                <div className='flex flex-col gap-2 items-center justify-center'>
+                                                    <AiOutlineExclamationCircle className='text-4xl text-red-600' />
+                                                    <div className='md:text-xl text-lg text-gray-500'>
+                                                        <p>Are you sure you want to delete this post?</p>
+                                                    </div>
+                                                    <div className='flex gap-2'>
+                                                        <Button color='dark' onClick={() => setOpenModal(false)}>Cancel</Button>
+                                                        <Button color='failure' onClick={() => deletePost(post?._id)}>Yes, I'm sure</Button>
+                                                    </div>
+                                                </div>
+                                            </Modal.Body>
+                                        </Modal>
+                                    </>
                                 )
                             }
                             </div>
@@ -199,11 +234,11 @@ function Post() {
                         <div className="py-6">
                             <div className="">
                             {showCommentToast && (
-                                            <Toast className='absolute bottom-32'>
-                                                <div className="ml-3 text-sm font-normal">Login to Comment</div>
-                                                <Toast.Toggle onDismiss={() => setShowCommentToast(false)} />
-                                            </Toast>
-                                        )}
+                                <Toast className='absolute bottom-32'>
+                                    <div className="ml-3 text-sm font-normal">Login to Comment</div>
+                                    <Toast.Toggle onDismiss={() => setShowCommentToast(false)} />
+                                </Toast>
+                            )}
                                 <div className="flex items-center border border-gray-600 dark:border-gray-200 rounded-full h-12 px-2">
                                     <form onSubmit={handleSubmit} className='flex justify-center items-center w-full'>
                                         <div className="max-h-12 px-3 outline-none flex-1 bg-transparent">

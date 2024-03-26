@@ -54,9 +54,6 @@ export const getPost = async(req, res, next) => {
 export const likePost = async(req, res, next) => {
     const { postId, userId } = req.params
 
-    // if(req.user.id !== userId){
-    //     return next(errorHandler(403, 'Login to like post'))
-    // }
 
     if(!postId || !userId || postId === '' || userId === ''){
         return next(errorHandler(403, "Unauthorized to like post"))
@@ -65,19 +62,39 @@ export const likePost = async(req, res, next) => {
     try{
         const post = await Post.findById({_id: postId})
         const postIndex = post.likes.indexOf(userId)
+        
 
         if(postIndex === -1){
-            post.likes.push(userId)
             post.numberOfLikes += 1
+            post.likes.push(userId)
         }else{
             post.likes.splice(postIndex, 1)
             post.numberOfLikes -= 1
         }
+        console.log(postIndex)
 
         await post.save()
 
         res.status(200).json(post)
 
+    }catch(err){
+        next(err)
+    }
+}
+
+
+export const deletePost = async (req, res, next) => {
+    const { postId, userId } = req.params
+    console.log(postId, userId)
+
+    if(!postId || postId === '' || !userId || userId === ''){
+        return next(errorHandler(404, 'Login to be able to login'))
+    }
+
+    try{
+        const deletedPost = await Post.findByIdAndDelete(postId)
+
+        res.status(200).json(deletedPost)
     }catch(err){
         next(err)
     }

@@ -30,6 +30,8 @@ function Profile() {
   const [openFollowing, setOpenFollowing] = useState(false)
   const [follow, setFollow] = useState('')
   const [followers, setFollowers] = useState([])
+  const [openDeleteModal, setOpenDeleteModal] = useState(false)
+
   
   // const socket = io('http://localhost:3000')
 
@@ -165,6 +167,7 @@ useEffect(() => {
 //     }
 // }, [socket, user?._id])
 
+
   
 
   return (
@@ -261,7 +264,13 @@ useEffect(() => {
                       {
                         posts && (
                           posts?.posts?.map(post => (
-                            <Card key={post?._id} post={post} />
+                            <Card 
+                              key={post?._id} 
+                              post={post} 
+                              setOpenDeleteModal={setOpenDeleteModal}  
+                              openDeleteModal={openDeleteModal}
+                              setPosts={setPosts} posts={posts} 
+                            />
                           ))
                         )
                       }
