@@ -29,11 +29,12 @@ function Profile() {
   const [openFollower, setOpenFollower] = useState(false)
   const [openFollowing, setOpenFollowing] = useState(false)
   const [follow, setFollow] = useState('')
+  const [onlineUser, setOnlineUser] = useState([])
   const [followers, setFollowers] = useState([])
   const [openDeleteModal, setOpenDeleteModal] = useState(false)
+  const [arrivalMessages, setArrivalMessages] = useState({})
 
-  
-  // const socket = io('http://localhost:3000')
+  const socket = io('http://localhost:3001')
 
   const { inView, ref: refView } = useInView()
 
@@ -157,18 +158,31 @@ useEffect(() => {
     // }
   // }, [socket])
 
-//   useEffect(() => {
-//     if(user?._id === currentUser?._id){
-//       socket.on('onlineSocket', (data) => {
-//         socket.emit('newUser', {userId: user?._id, socketId: data})
-//       })
-//     }else{
-//       ret
-//     }
-// }, [socket, user?._id])
+  useEffect(() => {
+   socket.emit('addUser', currentUser?._id) 
+  }, [user._id])
 
+  useEffect(() => {
+    if(user?._id === undefined){
+      return;
+    }
+
+    socket.on('getUser', (data) => {
+        const userOnline = data.filter(users => users.userId === user?._id)
+        setOnlineUser(userOnline)
+    })
+  }, [user?._id])
 
   
+  useEffect(() => {
+    socket.on('getMessage', (data) => {
+        setArrivalMessages({
+          senderId: data.senderId,
+          text: data.text,
+          createdAt: Date.now()
+        })
+    })
+  }, [])
 
   return (
     <div className="w-full min-h-screen flex-wrap pb-4">
@@ -197,9 +211,8 @@ useEffect(() => {
                         'Following' : 'Follow'
                       }
                       </Button>
-                      {/* <Button color="light" className="p-0" onClick={() => setOpenMessage(true)}><FaRegEnvelope /></Button> */}
+                      <Button color="light" className="p-0" onClick={() => setOpenMessage(true)}><FaRegEnvelope /></Button>
                     </>
-
                   ): (
                     <Button className="p-0" onClick={() => setOpenModal(true)} outline color="dark"><MdEdit /></Button>
                   )
@@ -277,7 +290,7 @@ useEffect(() => {
                     </div>
                     {
                       openMessage && (
-                        <Message user={user} openMessage={openMessage} setOpenMessage={setOpenMessage} />
+                        <Message arrivalMessages={arrivalMessages} onlineUser={onlineUser} user={user} openMessage={openMessage} setOpenMessage={setOpenMessage} />
                       )
                     }
                

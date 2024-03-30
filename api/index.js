@@ -6,6 +6,7 @@ import authRouter from './routes/auth.route.js'
 import userRouter from './routes/user.route.js'
 import postRouter from './routes/post.route.js'
 import commentRouter from './routes/comment.router.js'
+import messageRouter from './routes/message.route.js'
 import cookieParser from "cookie-parser";
 import bodyParser from 'body-parser'
 
@@ -38,6 +39,7 @@ app.use('/api/auth', authRouter)
 app.use('/api/user', userRouter)
 app.use('/api/post', postRouter)
 app.use('/api/comment', commentRouter)
+app.use('/api/message', messageRouter)
 
 // CHAT LOGIC
 // const io = new Server(httpServer, {
