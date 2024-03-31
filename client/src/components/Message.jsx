@@ -27,14 +27,15 @@ const Message = ({ arrivalMessages, user, setOpenMessage, onlineUser }) => {
                 })
             })
             const data = await res.json()
-            // console.log(data)
             
             if(res.ok){
                 socket.emit('sendMessage', {
-                    senderId: data.sender,
-                    text: data.message,
-                    receiverId: data.receiver
+                    senderId: data?.senderId,
+                    text: data?.message,
+                    receiverId: data?.receiverId,
+                    createdAt: data?.createdAt
                 })
+                setNewMessage('')
             }
         }catch(err){
             console.log(err)
@@ -70,9 +71,9 @@ const Message = ({ arrivalMessages, user, setOpenMessage, onlineUser }) => {
     }, [messages])
    
     
-    //   useEffect(() => {
-    //     arrivalMessages && setMessages((prev) => [...prev, arrivalMessages])
-    //   }, [arrivalMessages, onlineUser[0]?.userId])
+      useEffect(() => {
+        arrivalMessages && setMessages((prev) => [...prev, arrivalMessages])
+      }, [arrivalMessages])
 
       useEffect(() => {
         socket.emit('typing', { receiverId: onlineUser[0]?.userId })
@@ -83,7 +84,6 @@ const Message = ({ arrivalMessages, user, setOpenMessage, onlineUser }) => {
     //         console.log(data)
     //     })
     //   }, [newMessage])
-
   return (
     <div
         className='w-[26rem] h-[30rem] z-10 rounded-lg fixed bottom-4 right-10 bg-gray-200 dark:bg-slate-800 shadow-lg' 
@@ -116,22 +116,26 @@ const Message = ({ arrivalMessages, user, setOpenMessage, onlineUser }) => {
         <div className="w-full h-[70%] p-2 overflow-y-scroll flex flex-col gap-3">
             <div className="w-[90%] flex flex-col gap-2">
                 {
-                    messages?.map((message, i) => (
-                        <div key={message?._id} className="flex gap-2 items-start">
-                                <Avatar className='max- max-w-[2rem] min-w-[2rem]' img={senders[i]?.picture} rounded size='sm' />
-                            <div className="bg-slate-900 dark:bg-gray-200 p-2 rounded-lg">
+                    messages?.map((message, i) => {
+                        const userfilter = senders?.filter(sender => sender._id === message.senderId)
+                        return(
+                        <div key={i} className="flex gap-4 items-end chat chat-start">
+                                <Avatar className='max- max-w-[2rem] min-w-[2rem]' img={userfilter[0]?.picture} rounded size='sm' />
+                            <div className="bg-slate-900 chat-bubble dark:bg-gray-200 p-2 rounded-lg">
                                 <p className='text-gray-100 dark:text-slate-900 tracking-tighter 
                                     text-justify text-sm'>{message.message}
                                 </p>
                                 <p className='text-gray-400 text-right text-sm'>{moment(message.createdAt).format('LT')}</p>
                             </div>
                         </div>
-                    ))
+                        )
+                    })
                 }
             </div>
         </div>
         <form onSubmit={handleSubmit} className=" w-full flex flex-col gap-1 border-t border-slate-400 h-[20%]">
             <textarea 
+                value={newMessage}
                 placeholder='Write your message?' 
                 onChange={e => setNewMessage(e.target.value)}
                 className='w-full border-0 bg-transparent border-b border-slate-400 resize-none outline-none text-gray-800 dark:text-slate-200 min-h-[3rem] max-h-[3rem]'></textarea>

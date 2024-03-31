@@ -32,7 +32,7 @@ function Profile() {
   const [onlineUser, setOnlineUser] = useState([])
   const [followers, setFollowers] = useState([])
   const [openDeleteModal, setOpenDeleteModal] = useState(false)
-  const [arrivalMessages, setArrivalMessages] = useState({})
+  const [arrivalMessages, setArrivalMessages] = useState()
 
   const socket = io('http://localhost:3001')
 
@@ -177,10 +177,10 @@ useEffect(() => {
   useEffect(() => {
     socket.on('getMessage', (data) => {
         setArrivalMessages({
-          senderId: data.senderId,
-          text: data.text,
+          senderId: data?.senderId,
+          message: data?.text,
           createdAt: Date.now()
-        })
+    })
     })
   }, [])
 
