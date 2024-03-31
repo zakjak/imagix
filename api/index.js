@@ -9,11 +9,11 @@ import commentRouter from './routes/comment.router.js'
 import messageRouter from './routes/message.route.js'
 import cookieParser from "cookie-parser";
 import bodyParser from 'body-parser'
+import { app, server } from "./socket/socket.js";
 
 // import { createServer } from 'http'
 // import { Server } from 'socket.io'
 dotenv.config()
-const app = express()
 // export const httpServer = createServer(app)
 
 // Middleware
@@ -52,7 +52,7 @@ app.use('/api/message', messageRouter)
 
 
 
-app.listen(3000, () => {
+server.listen(3000, () => {
     console.log(`Server running on port 3000`)
 })
 
